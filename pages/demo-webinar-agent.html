@@ -1,0 +1,852 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Finding Purpose in Life and Career</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-dark: #0f172a;
+            --card-bg: #1e293b;
+            --border-color: #334155;
+            --accent-amber: #f59e0b;
+            --accent-coral: #f97316;
+            --accent-purple: #8b5cf6;
+            --text-primary: #f1f5f9;
+            --text-secondary: #94a3b8;
+            --gradient-1: linear-gradient(135deg, #f59e0b, #f97316);
+            --gradient-2: linear-gradient(135deg, #8b5cf6, #f59e0b);
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-dark);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Navigation Dots */
+        .nav-dots {
+            position: fixed;
+            right: 30px;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .nav-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: rgba(148, 163, 184, 0.3);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-dot.active,
+        .nav-dot:hover {
+            background: var(--accent-amber);
+            transform: scale(1.2);
+        }
+
+        .nav-dot::after {
+            content: attr(data-section);
+            position: absolute;
+            right: 25px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: var(--card-bg);
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 12px;
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+            border: 1px solid var(--border-color);
+        }
+
+        .nav-dot:hover::after {
+            opacity: 1;
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            position: relative;
+            background: radial-gradient(ellipse at center, rgba(139, 92, 246, 0.1), transparent),
+                        radial-gradient(ellipse at 70% 30%, rgba(245, 158, 11, 0.05), transparent);
+        }
+
+        .hero-content {
+            max-width: 800px;
+            padding: 0 20px;
+        }
+
+        .hero-badge {
+            display: inline-block;
+            background: rgba(245, 158, 11, 0.1);
+            border: 1px solid rgba(245, 158, 11, 0.3);
+            color: var(--accent-amber);
+            padding: 10px 20px;
+            border-radius: 50px;
+            font-weight: 500;
+            font-size: 14px;
+            margin-bottom: 30px;
+            animation: fadeInUp 0.8s ease;
+        }
+
+        .hero-title {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2.5rem, 6vw, 4rem);
+            font-weight: 700;
+            background: var(--gradient-2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 20px;
+            animation: fadeInUp 0.8s ease 0.2s both;
+        }
+
+        .hero-subtitle {
+            font-size: 1.3rem;
+            color: var(--text-secondary);
+            margin-bottom: 40px;
+            animation: fadeInUp 0.8s ease 0.4s both;
+        }
+
+        .scroll-indicator {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: var(--accent-amber);
+            animation: bounce 2s infinite;
+            cursor: pointer;
+        }
+
+        /* Section Styles */
+        section {
+            padding: 100px 0;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding-left: 20px;
+            padding-right: 20px;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .section-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .section-subtitle {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Card Layouts */
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-bottom: 50px;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 15px;
+            padding: 30px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--gradient-1);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .card:hover::before {
+            opacity: 1;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(245, 158, 11, 0.3);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .card-icon {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            display: block;
+        }
+
+        .card-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: var(--text-primary);
+        }
+
+        .card-content {
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        /* Quote Styles */
+        .quote-block {
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.1), rgba(245, 158, 11, 0.1));
+            border-left: 4px solid var(--accent-amber);
+            border-radius: 10px;
+            padding: 30px;
+            margin: 40px 0;
+            font-size: 1.2rem;
+            font-style: italic;
+            position: relative;
+        }
+
+        .quote-block::before {
+            content: '"';
+            position: absolute;
+            top: -10px;
+            left: 20px;
+            font-size: 4rem;
+            color: var(--accent-amber);
+            opacity: 0.3;
+        }
+
+        .quote-author {
+            text-align: right;
+            margin-top: 15px;
+            color: var(--accent-amber);
+            font-weight: 500;
+        }
+
+        /* Timeline Styles */
+        .timeline {
+            position: relative;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: var(--gradient-1);
+            transform: translateX(-50%);
+        }
+
+        .timeline-item {
+            position: relative;
+            width: 50%;
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+
+        .timeline-item:nth-child(odd) {
+            left: 0;
+            text-align: right;
+            padding-right: 50px;
+        }
+
+        .timeline-item:nth-child(even) {
+            left: 50%;
+            padding-left: 50px;
+        }
+
+        .timeline-content {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 25px;
+            position: relative;
+        }
+
+        .timeline-item::after {
+            content: '';
+            position: absolute;
+            width: 15px;
+            height: 15px;
+            background: var(--accent-amber);
+            border-radius: 50%;
+            top: 30px;
+        }
+
+        .timeline-item:nth-child(odd)::after {
+            right: -7px;
+        }
+
+        .timeline-item:nth-child(even)::after {
+            left: -7px;
+        }
+
+        /* Framework Diagram */
+        .framework-diagram {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+            margin: 50px 0;
+            max-width: 900px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .framework-item {
+            text-align: center;
+            padding: 40px 20px;
+            background: var(--card-bg);
+            border: 2px solid var(--border-color);
+            border-radius: 15px;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .framework-item:hover {
+            border-color: var(--accent-amber);
+            transform: scale(1.05);
+        }
+
+        .framework-item::after {
+            content: '→';
+            position: absolute;
+            right: -25px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1.5rem;
+            color: var(--accent-amber);
+        }
+
+        .framework-item:last-child::after {
+            display: none;
+        }
+
+        .framework-number {
+            width: 50px;
+            height: 50px;
+            background: var(--gradient-1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        /* Action Items */
+        .action-items {
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.05), rgba(139, 92, 246, 0.05));
+            border-radius: 15px;
+            padding: 40px;
+            margin: 50px 0;
+        }
+
+        .action-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+            margin-bottom: 20px;
+            padding: 20px;
+            background: var(--card-bg);
+            border-radius: 10px;
+            border: 1px solid var(--border-color);
+        }
+
+        .action-checkbox {
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--accent-amber);
+            border-radius: 4px;
+            margin-top: 2px;
+            flex-shrink: 0;
+        }
+
+        /* Stats Cards */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+            margin: 40px 0;
+        }
+
+        .stat-card {
+            text-align: center;
+            padding: 30px;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--accent-amber);
+        }
+
+        .stat-number {
+            font-size: 3rem;
+            font-weight: 700;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+        }
+
+        .stat-label {
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        /* Footer */
+        .footer {
+            border-top: 1px solid var(--border-color);
+            padding: 40px 20px;
+            text-align: center;
+            color: var(--text-secondary);
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateY(0);
+            }
+            40% {
+                transform: translateY(-10px);
+            }
+            60% {
+                transform: translateY(-5px);
+            }
+        }
+
+        /* Mobile Responsiveness */
+        @media (max-width: 768px) {
+            .nav-dots {
+                display: none;
+            }
+
+            .timeline::before {
+                left: 20px;
+            }
+
+            .timeline-item {
+                width: 100%;
+                left: 0 !important;
+                text-align: left !important;
+                padding-left: 60px !important;
+                padding-right: 20px !important;
+            }
+
+            .timeline-item::after {
+                left: 13px !important;
+            }
+
+            .framework-diagram {
+                grid-template-columns: 1fr;
+            }
+
+            .framework-item::after {
+                content: '↓';
+                right: 50%;
+                top: auto;
+                bottom: -25px;
+                transform: translateX(50%);
+            }
+
+            section {
+                padding: 60px 0;
+            }
+
+            .section-title {
+                font-size: 2rem;
+                flex-direction: column;
+                gap: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Dots -->
+    <div class="nav-dots">
+        <div class="nav-dot active" data-section="Hero" onclick="scrollToSection('hero')"></div>
+        <div class="nav-dot" data-section="Root Causes" onclick="scrollToSection('root-causes')"></div>
+        <div class="nav-dot" data-section="The Problem" onclick="scrollToSection('problem')"></div>
+        <div class="nav-dot" data-section="Finding Purpose" onclick="scrollToSection('finding-purpose')"></div>
+        <div class="nav-dot" data-section="Framework" onclick="scrollToSection('framework')"></div>
+        <div class="nav-dot" data-section="Action Items" onclick="scrollToSection('action-items')"></div>
+    </div>
+
+    <!-- Hero Section -->
+    <section id="hero" class="hero">
+        <div class="hero-content">
+            <div class="hero-badge">🎯 Purpose Discovery Webinar</div>
+            <h1 class="hero-title">Finding Purpose in Life and Career</h1>
+            <p class="hero-subtitle">A comprehensive guide to breaking free from confusion and discovering your true calling</p>
+        </div>
+        <div class="scroll-indicator" onclick="scrollToSection('root-causes')">
+            <div style="font-size: 24px;">↓</div>
+            <div style="font-size: 12px;">Scroll to explore</div>
+        </div>
+    </section>
+
+    <!-- Root Causes Section -->
+    <section id="root-causes">
+        <div class="section-header">
+            <h2 class="section-title">🌱 The Root of Confusion</h2>
+            <p class="section-subtitle">Understanding why we struggle to find our purpose in modern times</p>
+        </div>
+
+        <div class="cards-grid">
+            <div class="card">
+                <div class="card-icon">👥</div>
+                <h3 class="card-title">Generational Influence</h3>
+                <div class="card-content">
+                    Most participants identified parents as their strongest influence. However, previous generations operated with limited knowledge and no lifelong learning - studying until college, then working 30-40 years with minimal updates.
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-icon">📱</div>
+                <h3 class="card-title">Information Overload</h3>
+                <div class="card-content">
+                    With internet and social media, knowledge became widely accessible. This abundance of options led to confusion - when there was only one option before, now there are countless possibilities.
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-icon">🎓</div>
+                <h3 class="card-title">The College Template</h3>
+                <div class="card-content">
+                    After years of "work hard to get into college," many students face reality check. This creates a pattern of starting things, not finishing them, and constantly searching for the next opportunity.
+                </div>
+            </div>
+        </div>
+
+        <div class="quote-block">
+            If you study, you will get good work.
+            <div class="quote-author">— The Previous Generation's Message</div>
+        </div>
+    </section>
+
+    <!-- The Problem Section -->
+    <section id="problem">
+        <div class="section-header">
+            <h2 class="section-title">⚠️ Why We Can't Find Purpose</h2>
+            <p class="section-subtitle">The core issues preventing us from discovering our calling</p>
+        </div>
+
+        <div class="quote-block">
+            We don't know what we want, there is no one to teach us, our home situation is not like that, we say that we should try something, and all the confused people in our life are completely stuck and finished.
+        </div>
+
+        <div class="cards-grid">
+            <div class="card">
+                <div class="card-icon">⚡</div>
+                <h3 class="card-title">Survival Mode</h3>
+                <div class="card-content">
+                    Fear-induced state where focus is purely on managing and surviving rather than thriving. <strong>When you are in survival mode, you don't see big picture.</strong>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-icon">🏔️</div>
+                <h3 class="card-title">Maslow's Hierarchy</h3>
+                <div class="card-content">
+                    Before thinking about purpose, basic necessities must be met - food, home, medical expenses, clothing. Most people struggle with the first three layers.
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-icon">💭</div>
+                <h3 class="card-title">The Stress Trap</h3>
+                <div class="card-content">
+                    Constant stress prevents clear thinking. You must find what you like first to create an environment where you can think without stress.
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Finding Purpose Section -->
+    <section id="finding-purpose">
+        <div class="section-header">
+            <h2 class="section-title">🎯 The Truth About Purpose</h2>
+            <p class="section-subtitle">Key insights that will change how you think about finding your calling</p>
+        </div>
+
+        <div class="cards-grid">
+            <div class="card">
+                <div class="card-icon">🔄</div>
+                <h3 class="card-title">Purpose Evolves</h3>
+                <div class="card-content">
+                    <strong>You will not have fixed purpose.</strong> Purpose is not fixed - you cannot set one big purpose for your entire life. It evolves as you grow and learn.
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-icon">⏰</div>
+                <h3 class="card-title">Start Temporary</h3>
+                <div class="card-content">
+                    If you think something is your purpose, consider it temporarily. Whether it's right or wrong doesn't matter - it's a good start.
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-icon">⚡</div>
+                <h3 class="card-title">Energy Gain Test</h3>
+                <div class="card-content">
+                    <strong>By living your purpose, you will get energy.</strong> When passionate about certain things, doing that work results in energy gain rather than energy loss.
+                </div>
+            </div>
+        </div>
+
+        <div class="quote-block">
+            The passion trap: "If you are passionate about it, then the usefulness is close to zero." Passion must serve a useful purpose.
+        </div>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-number">2</div>
+                <div class="stat-label">Requirements for Purpose:<br>Love it + Make it Useful</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">3E</div>
+                <div class="stat-label">The Framework:<br>Experiment, Explore, Educate</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">6</div>
+                <div class="stat-label">Years of Evolution:<br>From Challenge to Summit</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Framework Section -->
+    <section id="framework">
+        <div class="section-header">
+            <h2 class="section-title">🚀 The Three Es Framework</h2>
+            <p class="section-subtitle">Life is about three key activities that work together to create real education</p>
+        </div>
+
+        <div class="framework-diagram">
+            <div class="framework-item">
+                <div class="framework-number">1</div>
+                <h3>🧪 Experimenting</h3>
+                <p>Testing ideas and trying new things without disturbing your current stability</p>
+            </div>
+            <div class="framework-item">
+                <div class="framework-number">2</div>
+                <h3>🗺️ Exploring</h3>
+                <p>Getting out of comfort zone, traveling, meeting people, reading books</p>
+            </div>
+            <div class="framework-item">
+                <div class="framework-number">3</div>
+                <h3>📚 Educating</h3>
+                <p>Learning through books, documentaries, long-form content</p>
+            </div>
+        </div>
+
+        <div class="timeline">
+            <div class="timeline-item">
+                <div class="timeline-content">
+                    <h3>🎯 What are you good at?</h3>
+                    <p>Identify your existing skills and natural talents</p>
+                </div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-content">
+                    <h3>🔍 What problems are you solving?</h3>
+                    <p>Find the pain points you can address with your skills</p>
+                </div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-content">
+                    <h3>👥 Who are you helping?</h3>
+                    <p>Define your target audience and understand their needs</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="quote-block">
+            Live example: Skill (Knowledge of AI) + Problem (AI education for kids) + Audience (Children) = Purpose (Training children while maximizing skills)
+        </div>
+    </section>
+
+    <!-- Action Items Section -->
+    <section id="action-items">
+        <div class="section-header">
+            <h2 class="section-title">✅ Your Next Steps</h2>
+            <p class="section-subtitle">Concrete actions to start your purpose discovery journey</p>
+        </div>
+
+        <div class="action-items">
+            <h3 style="margin-bottom: 30px; color: var(--accent-amber);">🎯 Immediate Action Items</h3>
+            
+            <div class="action-item">
+                <div class="action-checkbox"></div>
+                <div>
+                    <strong>Skills & Problems Audit:</strong> Write down 3 things you're good at and identify 5 problems in your daily life to find potential opportunities
+                </div>
+            </div>
+
+            <div class="action-item">
+                <div class="action-checkbox"></div>
+                <div>
+                    <strong>Weekend Experiment:</strong> For those interested in web development - experiment with Shopify website development on weekends, aiming to complete 2 projects per month for additional income
+                </div>
+            </div>
+
+            <div class="action-item">
+                <div class="action-checkbox"></div>
+                <div>
+                    <strong>Safe Exploration:</strong> Start exploring interests through experimentation, education, and exposure without disturbing your current stability
+                </div>
+            </div>
+        </div>
+
+        <div class="cards-grid">
+            <div class="card">
+                <div class="card-icon">💡</div>
+                <h3 class="card-title">The Indian Advantage</h3>
+                <div class="card-content">
+                    "If you do business in India, you will do business in the world." The ability to experiment while maintaining a backup plan is a unique strength.
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-icon">⚖️</div>
+                <h3 class="card-title">Context Matters</h3>
+                <div class="card-content">
+                    Don't just follow inspiration blindly. Understand the situation, business context, backup support, and failure stories before making major decisions.
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-icon">😊</div>
+                <h3 class="card-title">Purpose at Any Age</h3>
+                <div class="card-content">
+                    For those wondering about rest after success: "Are you not feeling happy? I am enjoying. Your life itself is an enjoyment. Don't just do what you do. Enjoy."
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>Generated from webinar transcript • Finding Purpose in Life and Career • Today</p>
+        <p style="margin-top: 10px; font-size: 0.9rem;">💫 Transform your confusion into clarity through experimentation, exploration, and education</p>
+    </footer>
+
+    <script>
+        // Navigation functionality
+        function scrollToSection(sectionId) {
+            document.getElementById(sectionId).scrollIntoView({
+                behavior: 'smooth',
+                block: 'start'
+            });
+        }
+
+        // Update active navigation dot on scroll
+        window.addEventListener('scroll', () => {
+            const sections = ['hero', 'root-causes', 'problem', 'finding-purpose', 'framework', 'action-items'];
+            const dots = document.querySelectorAll('.nav-dot');
+            
+            let current = 'hero';
+            
+            sections.forEach(sectionId => {
+                const section = document.getElementById(sectionId);
+                if (section) {
+                    const rect = section.getBoundingClientRect();
+                    if (rect.top <= 100 && rect.bottom >= 100) {
+                        current = sectionId;
+                    }
+                }
+            });
+            
+            dots.forEach((dot, index) => {
+                dot.classList.remove('active');
+                if (sections[index] === current) {
+                    dot.classList.add('active');
+                }
+            });
+        });
+
+        // Add scroll reveal animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        // Observe all cards and sections
+        document.querySelectorAll('.card, .timeline-item, .framework-item').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(30px)';
+            el.style.transition = 'all 0.6s ease';
+            observer.observe(el);
+        });
+    </script>
+</body>
+</html>
