@@ -17,15 +17,9 @@
     padding: 60px 20px;
   }
 
-  .container {
-    max-width: 800px;
-    margin: 0 auto;
-  }
+  .container { max-width: 800px; margin: 0 auto; }
 
-  header {
-    text-align: center;
-    margin-bottom: 64px;
-  }
+  header { text-align: center; margin-bottom: 64px; }
 
   .badge {
     display: inline-block;
@@ -59,10 +53,16 @@
     line-height: 1.6;
   }
 
-  .pages-grid {
-    display: grid;
-    gap: 16px;
+  .count {
+    display: inline-block;
+    margin-top: 16px;
+    font-size: 0.85rem;
+    color: #64748b;
   }
+
+  .count strong { color: #f59e0b; }
+
+  .pages-grid { display: grid; gap: 16px; }
 
   .page-card {
     display: flex;
@@ -97,32 +97,16 @@
     flex-shrink: 0;
   }
 
-  .page-info h3 {
-    font-size: 1.05rem;
-    font-weight: 600;
-    margin-bottom: 4px;
-  }
-
-  .page-info .date {
-    font-size: 0.8rem;
-    color: #94a3b8;
-  }
+  .page-info h3 { font-size: 1.05rem; font-weight: 600; margin-bottom: 4px; }
+  .page-info .date { font-size: 0.8rem; color: #94a3b8; }
 
   .empty-state {
     text-align: center;
     padding: 80px 20px;
     color: #64748b;
   }
-
-  .empty-state p {
-    font-size: 1.1rem;
-    margin-bottom: 8px;
-  }
-
-  .empty-state .hint {
-    font-size: 0.85rem;
-    color: #475569;
-  }
+  .empty-state p { font-size: 1.1rem; margin-bottom: 8px; }
+  .empty-state .hint { font-size: 0.85rem; color: #475569; }
 
   footer {
     text-align: center;
@@ -140,18 +124,20 @@
     <div class="badge">Auto-Generated</div>
     <h1>Webinar Pages</h1>
     <p class="subtitle">Beautiful summaries of webinars, workshops, and meetings. Recorded, transcribed, and published automatically.</p>
+    <p class="count"><strong>1</strong> page published</p>
   </header>
 
-  <div class="pages-grid" id="pages">
-    <div class="empty-state">
-      <p>No webinar pages yet</p>
-      <p class="hint">Record your first webinar to see it appear here</p>
-    </div>
+  <div class="pages-grid">
+    <a href="pages/demo-webinar-agent.html" class="page-card">
+      <div class="page-number">1</div>
+      <div class="page-info">
+        <h3>Demo Webinar agent</h3>
+        <span class="date">March 23, 2026</span>
+      </div>
+    </a>
   </div>
 
-  <footer>
-    Powered by Webinar Agent &mdash; Record. Transcribe. Publish.
-  </footer>
+  <footer>Powered by Webinar Agent</footer>
 </div>
 </body>
 </html>
