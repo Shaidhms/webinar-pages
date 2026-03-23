@@ -1,0 +1,849 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Start Before You Feel Ready | Multiple Dots Podcast</title>
+    <meta name="description" content="Key insights from the Multiple Dots Podcast with Dharaneedharan (Social Eagle) and Jetson. On clarity, identity, decisions, and why starting matters more than knowing.">
+    <meta property="og:title" content="Start Before You Feel Ready | Multiple Dots Podcast">
+    <meta property="og:description" content="Clarity comes after you begin, not before. Key insights from the conversation between Dharaneedharan and Jetson.">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700;800&family=Inter:wght@400;500;600;700&display=swap');
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --bg: #0b0b0b;
+            --surface: #151515;
+            --surface-2: #1c1c1c;
+            --border: rgba(255,255,255,0.07);
+            --text: #ededed;
+            --text-dim: #888;
+            --gold: #d4a853;
+            --gold-glow: rgba(212,168,83,0.12);
+            --teal: #2dd4bf;
+            --teal-glow: rgba(45,212,191,0.1);
+            --coral: #f87171;
+            --lavender: #a78bfa;
+            --sky: #38bdf8;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.7;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3 { font-family: 'Playfair Display', serif; }
+
+        /* === HERO === */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-grid {
+            position: absolute;
+            inset: 0;
+            background-image:
+                radial-gradient(circle at 1px 1px, rgba(212,168,83,0.07) 1px, transparent 0);
+            background-size: 40px 40px;
+        }
+
+        .hero-glow {
+            position: absolute;
+            width: 600px; height: 600px;
+            border-radius: 50%;
+            filter: blur(120px);
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            background: radial-gradient(circle, var(--gold-glow), transparent 70%);
+            animation: breathe 8s ease-in-out infinite;
+        }
+
+        @keyframes breathe {
+            0%, 100% { opacity: 0.6; transform: translate(-50%,-50%) scale(1); }
+            50% { opacity: 1; transform: translate(-50%,-50%) scale(1.15); }
+        }
+
+        .hero-content {
+            position: relative;
+            max-width: 800px;
+        }
+
+        .podcast-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.6rem;
+            padding: 0.5rem 1.2rem;
+            border-radius: 100px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            font-size: 0.78rem;
+            font-weight: 600;
+            color: var(--gold);
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            margin-bottom: 2rem;
+        }
+
+        .podcast-badge svg { opacity: 0.7; }
+
+        .hero h1 {
+            font-size: clamp(3rem, 8vw, 5.5rem);
+            font-weight: 800;
+            line-height: 1.05;
+            margin-bottom: 1.5rem;
+            letter-spacing: -0.02em;
+        }
+
+        .hero h1 em {
+            font-style: italic;
+            color: var(--gold);
+        }
+
+        .hero-sub {
+            font-size: 1.15rem;
+            color: var(--text-dim);
+            max-width: 520px;
+            margin: 0 auto 2.5rem;
+            line-height: 1.6;
+        }
+
+        .hero-meta {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+            margin-bottom: 2rem;
+        }
+
+        .meta-item {
+            font-size: 0.82rem;
+            color: var(--text-dim);
+        }
+
+        .meta-item strong {
+            color: var(--text);
+        }
+
+        .watch-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.9rem 2rem;
+            background: var(--gold);
+            color: #0b0b0b;
+            text-decoration: none;
+            border-radius: 100px;
+            font-weight: 700;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+        }
+
+        .watch-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(212,168,83,0.3);
+        }
+
+        /* === CONTAINER === */
+        .container {
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+
+        section {
+            padding: 5rem 0;
+        }
+
+        /* === SECTION HEADERS === */
+        .sec-label {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.7rem;
+            font-weight: 700;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            margin-bottom: 1rem;
+        }
+
+        .sec-head {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .sec-head h2 {
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 700;
+            line-height: 1.15;
+            margin-bottom: 1rem;
+        }
+
+        .sec-head p {
+            color: var(--text-dim);
+            max-width: 560px;
+            margin: 0 auto;
+        }
+
+        /* === INTRO QUOTE === */
+        .intro-quote {
+            position: relative;
+            text-align: center;
+            padding: 4rem 2rem;
+            margin: 0 auto;
+            max-width: 700px;
+        }
+
+        .intro-quote blockquote {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(1.4rem, 3vw, 2rem);
+            font-weight: 500;
+            font-style: italic;
+            line-height: 1.5;
+            color: var(--text);
+        }
+
+        .intro-quote blockquote span {
+            color: var(--gold);
+        }
+
+        .intro-quote cite {
+            display: block;
+            margin-top: 1.5rem;
+            font-style: normal;
+            font-size: 0.85rem;
+            color: var(--text-dim);
+        }
+
+        .intro-quote::before,
+        .intro-quote::after {
+            content: '';
+            position: absolute;
+            width: 60px;
+            height: 1px;
+            background: var(--gold);
+            opacity: 0.3;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .intro-quote::before { top: 0; }
+        .intro-quote::after { bottom: 0; }
+
+        /* === INSIGHT CARDS (Illustrated) === */
+        .insights-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-top: 3rem;
+        }
+
+        .insight-card {
+            position: relative;
+            padding: 2.5rem 2rem;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            overflow: hidden;
+            transition: all 0.4s ease;
+        }
+
+        .insight-card:hover {
+            border-color: rgba(255,255,255,0.12);
+            transform: translateY(-4px);
+        }
+
+        .insight-illust {
+            width: 64px;
+            height: 64px;
+            border-radius: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .insight-card:nth-child(1) .insight-illust { background: var(--gold-glow); }
+        .insight-card:nth-child(2) .insight-illust { background: var(--teal-glow); }
+        .insight-card:nth-child(3) .insight-illust { background: rgba(248,113,113,0.1); }
+        .insight-card:nth-child(4) .insight-illust { background: rgba(167,139,250,0.1); }
+        .insight-card:nth-child(5) .insight-illust { background: rgba(56,189,248,0.1); }
+        .insight-card:nth-child(6) .insight-illust { background: rgba(251,191,36,0.1); }
+
+        .insight-card h3 {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 0.8rem;
+            line-height: 1.3;
+        }
+
+        .insight-card p {
+            font-size: 0.9rem;
+            color: var(--text-dim);
+            line-height: 1.6;
+            margin: 0;
+        }
+
+        .insight-tag {
+            display: inline-block;
+            margin-top: 1rem;
+            padding: 0.3rem 0.8rem;
+            border-radius: 100px;
+            font-size: 0.72rem;
+            font-weight: 600;
+            letter-spacing: 0.05em;
+        }
+
+        .insight-card:nth-child(1) .insight-tag { background: var(--gold-glow); color: var(--gold); }
+        .insight-card:nth-child(2) .insight-tag { background: var(--teal-glow); color: var(--teal); }
+        .insight-card:nth-child(3) .insight-tag { background: rgba(248,113,113,0.1); color: var(--coral); }
+        .insight-card:nth-child(4) .insight-tag { background: rgba(167,139,250,0.1); color: var(--lavender); }
+        .insight-card:nth-child(5) .insight-tag { background: rgba(56,189,248,0.1); color: var(--sky); }
+        .insight-card:nth-child(6) .insight-tag { background: rgba(251,191,36,0.1); color: #fbbf24; }
+
+        /* === FEATURED INSIGHT (large) === */
+        .featured {
+            position: relative;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            align-items: center;
+            padding: 4rem 3rem;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 28px;
+            margin: 3rem 0;
+            overflow: hidden;
+        }
+
+        @media (max-width: 768px) {
+            .featured {
+                grid-template-columns: 1fr;
+                padding: 2.5rem 2rem;
+                gap: 2rem;
+            }
+        }
+
+        .featured::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 3px;
+            background: linear-gradient(90deg, var(--gold), var(--teal), var(--lavender));
+        }
+
+        .featured-text .sec-label { color: var(--gold); }
+
+        .featured-text h2 {
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+        }
+
+        .featured-text p {
+            color: var(--text-dim);
+            font-size: 0.95rem;
+        }
+
+        .featured-visual {
+            position: relative;
+        }
+
+        /* Venn Diagram (Ikigai) SVG */
+        .ikigai-svg {
+            width: 100%;
+            max-width: 350px;
+            margin: 0 auto;
+            display: block;
+        }
+
+        /* === TIMELINE (Journey) === */
+        .journey-timeline {
+            position: relative;
+            padding: 2rem 0;
+        }
+
+        .journey-timeline::before {
+            content: '';
+            position: absolute;
+            left: 24px;
+            top: 0; bottom: 0;
+            width: 2px;
+            background: linear-gradient(to bottom, var(--gold), var(--teal), var(--lavender), var(--coral));
+        }
+
+        @media (max-width: 640px) {
+            .journey-timeline::before { left: 16px; }
+        }
+
+        .journey-item {
+            position: relative;
+            padding-left: 64px;
+            margin-bottom: 3rem;
+        }
+
+        @media (max-width: 640px) {
+            .journey-item { padding-left: 48px; }
+        }
+
+        .journey-dot {
+            position: absolute;
+            left: 14px;
+            top: 4px;
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            border: 3px solid var(--bg);
+        }
+
+        @media (max-width: 640px) {
+            .journey-dot { left: 6px; }
+        }
+
+        .journey-item:nth-child(1) .journey-dot { background: var(--gold); }
+        .journey-item:nth-child(2) .journey-dot { background: var(--teal); }
+        .journey-item:nth-child(3) .journey-dot { background: var(--lavender); }
+        .journey-item:nth-child(4) .journey-dot { background: var(--coral); }
+        .journey-item:nth-child(5) .journey-dot { background: var(--sky); }
+
+        .journey-item h3 {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .journey-item p {
+            color: var(--text-dim);
+            font-size: 0.9rem;
+        }
+
+        /* === QUOTE CARDS === */
+        .quotes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin: 3rem 0;
+        }
+
+        .quote-card {
+            padding: 2rem;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .quote-card::before {
+            content: '\201C';
+            position: absolute;
+            top: -10px;
+            left: 16px;
+            font-family: 'Playfair Display', serif;
+            font-size: 6rem;
+            line-height: 1;
+            opacity: 0.06;
+        }
+
+        .quote-card blockquote {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.1rem;
+            font-style: italic;
+            line-height: 1.5;
+            margin-bottom: 1rem;
+        }
+
+        .quote-card cite {
+            font-style: normal;
+            font-size: 0.78rem;
+            color: var(--text-dim);
+        }
+
+        /* === FRAMEWORK BOX === */
+        .framework {
+            padding: 3rem;
+            background: linear-gradient(135deg, rgba(212,168,83,0.05), rgba(45,212,191,0.03));
+            border: 1px solid rgba(212,168,83,0.15);
+            border-radius: 28px;
+            margin: 3rem 0;
+            text-align: center;
+        }
+
+        .framework h2 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .framework > p {
+            color: var(--text-dim);
+            margin-bottom: 2rem;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .fw-steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .fw-step {
+            padding: 1.5rem;
+            background: rgba(0,0,0,0.3);
+            border-radius: 16px;
+            border: 1px solid var(--border);
+        }
+
+        .fw-num {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            font-weight: 700;
+            opacity: 0.15;
+            margin-bottom: 0.5rem;
+        }
+
+        .fw-step h4 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1rem;
+            margin-bottom: 0.4rem;
+        }
+
+        .fw-step p {
+            font-size: 0.82rem;
+            color: var(--text-dim);
+            margin: 0;
+        }
+
+        /* === FOOTER === */
+        footer {
+            text-align: center;
+            padding: 3rem 2rem;
+            border-top: 1px solid var(--border);
+            font-size: 0.8rem;
+            color: var(--text-dim);
+        }
+
+        footer a { color: var(--gold); text-decoration: none; }
+
+        /* === ANIMATIONS === */
+        .reveal {
+            opacity: 0;
+            transform: translateY(24px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .reveal-delay-1 { transition-delay: 0.1s; }
+        .reveal-delay-2 { transition-delay: 0.2s; }
+        .reveal-delay-3 { transition-delay: 0.3s; }
+    </style>
+</head>
+<body>
+
+<!-- HERO -->
+<section class="hero">
+    <div class="hero-grid"></div>
+    <div class="hero-glow"></div>
+    <div class="hero-content">
+        <div class="podcast-badge">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3zM19 10v2a7 7 0 0 1-14 0v-2H3v2a9 9 0 0 0 8 8.94V23h2v-2.06A9 9 0 0 0 21 12v-2h-2z"/></svg>
+            Multiple Dots Podcast
+        </div>
+        <h1>Start Before<br>You Feel <em>Ready</em></h1>
+        <p class="hero-sub">Most people wait for clarity before they start. But clarity only comes after you begin.</p>
+        <div class="hero-meta">
+            <span class="meta-item"><strong>Guest:</strong> Dharaneedharan</span>
+            <span class="meta-item"><strong>Host:</strong> Jetson</span>
+            <span class="meta-item"><strong>Duration:</strong> 70 min</span>
+        </div>
+        <a href="https://youtu.be/qsFZt82hor0" target="_blank" class="watch-btn">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+            Watch Full Episode
+        </a>
+    </div>
+</section>
+
+<!-- OPENING QUOTE -->
+<div class="container">
+    <div class="intro-quote reveal">
+        <blockquote>"No one has a perfect plan. People just <span>start, adapt, and connect the dots</span> later."</blockquote>
+        <cite>The core philosophy behind Multiple Dots</cite>
+    </div>
+</div>
+
+<!-- KEY INSIGHTS -->
+<section>
+    <div class="container">
+        <div class="sec-head reveal">
+            <div class="sec-label" style="color: var(--gold);">Key Insights</div>
+            <h2>6 ideas that stayed with me<br>from this conversation</h2>
+            <p>This podcast isn't about motivation. It's about thinking patterns and how real decisions happen without full clarity.</p>
+        </div>
+
+        <div class="insights-grid">
+            <div class="insight-card reveal">
+                <div class="insight-illust">
+                    <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+                        <path d="M16 4L20 12L28 14L22 20L24 28L16 24L8 28L10 20L4 14L12 12L16 4Z" stroke="#d4a853" stroke-width="2" fill="rgba(212,168,83,0.1)"/>
+                    </svg>
+                </div>
+                <h3>Kill the Old Identity</h3>
+                <p>Growth means letting go of who you were. The old identity will hold you back. Whether it's a career shift or a new venture, you have to step out of the person you've been to become the person you need to be.</p>
+                <span class="insight-tag">Identity Shift</span>
+            </div>
+
+            <div class="insight-card reveal reveal-delay-1">
+                <div class="insight-illust">
+                    <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+                        <circle cx="16" cy="16" r="10" stroke="#2dd4bf" stroke-width="2"/>
+                        <path d="M16 10v6l4 2" stroke="#2dd4bf" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                </div>
+                <h3>Clarity Comes from Action</h3>
+                <p>You don't find clarity by thinking harder. You find it by starting. Confidence gets lost mid-journey. That's normal. The path reveals itself only after you begin walking.</p>
+                <span class="insight-tag">Execution</span>
+            </div>
+
+            <div class="insight-card reveal reveal-delay-2">
+                <div class="insight-illust">
+                    <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+                        <rect x="6" y="6" width="20" height="20" rx="4" stroke="#f87171" stroke-width="2"/>
+                        <path d="M12 16h8M16 12v8" stroke="#f87171" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                </div>
+                <h3>Leverage Everything</h3>
+                <p>Leverage of time, money, effort. Like how phones replaced the need to memorize numbers, AI and technology are tools to leverage. Adapting to technology isn't optional. It's the way of life going forward.</p>
+                <span class="insight-tag">Leverage</span>
+            </div>
+
+            <div class="insight-card reveal">
+                <div class="insight-illust">
+                    <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+                        <path d="M6 26V12l10-6 10 6v14" stroke="#a78bfa" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M6 16l10 6 10-6" stroke="#a78bfa" stroke-width="1.5" stroke-linecap="round" opacity="0.5"/>
+                    </svg>
+                </div>
+                <h3>Build an Ecosystem, Not Silos</h3>
+                <p>Dharaneedharan didn't build separate businesses. He built digital marketing, community, consulting, and events as one interconnected ecosystem. Each piece feeds the others within a core business.</p>
+                <span class="insight-tag">Business Design</span>
+            </div>
+
+            <div class="insight-card reveal reveal-delay-1">
+                <div class="insight-illust">
+                    <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+                        <path d="M8 24c0-8 4-12 8-16 4 4 8 8 8 16" stroke="#38bdf8" stroke-width="2" stroke-linecap="round"/>
+                        <circle cx="16" cy="24" r="3" fill="rgba(56,189,248,0.2)" stroke="#38bdf8" stroke-width="1.5"/>
+                    </svg>
+                </div>
+                <h3>Trust the Inner Signal</h3>
+                <p>When data says yes but your gut says no, listen to the gut. If there's even a small discomfort, the energy won't match. You won't be able to give your full self to something that doesn't sit right inside.</p>
+                <span class="insight-tag">Decision Making</span>
+            </div>
+
+            <div class="insight-card reveal reveal-delay-2">
+                <div class="insight-illust">
+                    <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+                        <path d="M8 8h16v20H8z" stroke="#fbbf24" stroke-width="2" fill="none" rx="2"/>
+                        <path d="M12 14h8M12 18h6M12 22h4" stroke="#fbbf24" stroke-width="1.5" stroke-linecap="round" opacity="0.6"/>
+                    </svg>
+                </div>
+                <h3>Learning Is Not Doing</h3>
+                <p>Reading books doesn't change your life. Applying what you read does. Knowledge from books is different from wisdom earned through experience. The treasure is useless if you never use it.</p>
+                <span class="insight-tag">Action vs Theory</span>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- IKIGAI SECTION -->
+<section>
+    <div class="container">
+        <div class="featured reveal">
+            <div class="featured-text">
+                <div class="sec-label" style="color: var(--gold);">The Framework</div>
+                <h2>Finding Your Ikigai</h2>
+                <p>Dharaneedharan found his path by mapping four questions. When all four overlap, that's not a job. That's your life's work.</p>
+                <p style="margin-top: 1rem;">He put it on a table and listed everything that fits. Digital marketing, community building, consulting, events. They all passed the four-circle test. Then he connected them into one ecosystem.</p>
+            </div>
+            <div class="featured-visual">
+                <svg class="ikigai-svg" viewBox="0 0 300 300" fill="none">
+                    <!-- Four overlapping circles -->
+                    <circle cx="130" cy="120" r="80" fill="rgba(212,168,83,0.06)" stroke="rgba(212,168,83,0.3)" stroke-width="1.5"/>
+                    <circle cx="170" cy="120" r="80" fill="rgba(45,212,191,0.06)" stroke="rgba(45,212,191,0.3)" stroke-width="1.5"/>
+                    <circle cx="130" cy="160" r="80" fill="rgba(167,139,250,0.06)" stroke="rgba(167,139,250,0.3)" stroke-width="1.5"/>
+                    <circle cx="170" cy="160" r="80" fill="rgba(248,113,113,0.06)" stroke="rgba(248,113,113,0.3)" stroke-width="1.5"/>
+                    <!-- Labels -->
+                    <text x="90" y="80" fill="#d4a853" font-size="11" font-family="Inter" font-weight="600">What you LOVE</text>
+                    <text x="170" y="80" fill="#2dd4bf" font-size="11" font-family="Inter" font-weight="600">What you're</text>
+                    <text x="170" y="93" fill="#2dd4bf" font-size="11" font-family="Inter" font-weight="600">GOOD AT</text>
+                    <text x="70" y="220" fill="#a78bfa" font-size="11" font-family="Inter" font-weight="600">What the world</text>
+                    <text x="70" y="233" fill="#a78bfa" font-size="11" font-family="Inter" font-weight="600">NEEDS</text>
+                    <text x="180" y="225" fill="#f87171" font-size="11" font-family="Inter" font-weight="600">What you can</text>
+                    <text x="180" y="238" fill="#f87171" font-size="11" font-family="Inter" font-weight="600">be PAID for</text>
+                    <!-- Center -->
+                    <text x="126" y="138" fill="#fff" font-size="13" font-family="Playfair Display" font-weight="700">IKIGAI</text>
+                    <text x="116" y="154" fill="rgba(255,255,255,0.5)" font-size="9" font-family="Inter">Your life's work</text>
+                </svg>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- DHARANEEDHARAN'S JOURNEY -->
+<section>
+    <div class="container">
+        <div class="sec-head reveal">
+            <div class="sec-label" style="color: var(--teal);">The Journey</div>
+            <h2>Connecting the dots<br>after the fact</h2>
+            <p>Decisions that didn't have data behind them. Moves that didn't make logical sense at the time. But looking back, every dot connected.</p>
+        </div>
+
+        <div class="journey-timeline">
+            <div class="journey-item reveal">
+                <div class="journey-dot"></div>
+                <h3>The 5 AM Webinar Experiment</h3>
+                <p>No data existed. Nobody had done a 5 AM webinar before. The logical question was: "Why would anyone show up at 5 AM during COVID?" No proof it would work. He did it anyway. 40,000 people showed up. 57-58 batches followed.</p>
+            </div>
+            <div class="journey-item reveal">
+                <div class="journey-dot"></div>
+                <h3>Trained 40,000+ People</h3>
+                <p>Through years of experimentation, he found frameworks that worked. Fine-tuned them. Trained 40,000 people. Saw real impact in their lives. That became something worth documenting, not just repeating.</p>
+            </div>
+            <div class="journey-item reveal">
+                <div class="journey-dot"></div>
+                <h3>Building a Community from Scratch</h3>
+                <p>Started with clarity, hit a confidence dip in the middle of the journey. That's the pattern. The beginning is exciting. The middle is where most people quit. The ones who push through are the ones who build something real.</p>
+            </div>
+            <div class="journey-item reveal">
+                <div class="journey-dot"></div>
+                <h3>The Book Decision</h3>
+                <p>A beautiful journey deserves documentation. Whether it's videos, podcasts, or books, these are what we leave behind for the next generation. Like inscriptions on stone, but for the modern age.</p>
+            </div>
+            <div class="journey-item reveal">
+                <div class="journey-dot"></div>
+                <h3>Social Eagle Ecosystem</h3>
+                <p>Digital marketing, community, consulting, events. Not separate businesses. One interconnected ecosystem where each part feeds the whole. That's the real model: build a system, not silos.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- MEMORABLE QUOTES -->
+<section>
+    <div class="container">
+        <div class="sec-head reveal">
+            <div class="sec-label" style="color: var(--lavender);">Words That Hit</div>
+            <h2>Lines from the conversation<br>that stayed with me</h2>
+        </div>
+
+        <div class="quotes-grid">
+            <div class="quote-card reveal">
+                <blockquote>"Learning is not doing. Knowing is not knowing. Doing is doing."</blockquote>
+                <cite>On why books alone don't change lives</cite>
+            </div>
+            <div class="quote-card reveal reveal-delay-1">
+                <blockquote>"An unused treasure might as well have stayed buried."</blockquote>
+                <cite>On applying knowledge vs. collecting it</cite>
+            </div>
+            <div class="quote-card reveal reveal-delay-2">
+                <blockquote>"If there's even a small discomfort inside, I won't do it. Data can be right and it still won't matter."</blockquote>
+                <cite>On trusting intuition over analysis</cite>
+            </div>
+            <div class="quote-card reveal">
+                <blockquote>"After we die, at least leave behind a video. Modern technology instead of inscriptions on stone."</blockquote>
+                <cite>On documenting your journey</cite>
+            </div>
+            <div class="quote-card reveal reveal-delay-1">
+                <blockquote>"Handling success is sometimes harder than handling failure."</blockquote>
+                <cite>On the ego satisfaction trap</cite>
+            </div>
+            <div class="quote-card reveal reveal-delay-2">
+                <blockquote>"Knowledge and wisdom are different departments. Wisdom comes only from experience."</blockquote>
+                <cite>On the limits of reading</cite>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- FRAMEWORK -->
+<section>
+    <div class="container">
+        <div class="framework reveal">
+            <div class="sec-label" style="color: var(--gold);">The Pattern</div>
+            <h2>The Multiple Dots Framework</h2>
+            <p>The pattern that emerged from the entire conversation. Not a formula. A way of thinking.</p>
+
+            <div class="fw-steps">
+                <div class="fw-step">
+                    <div class="fw-num">01</div>
+                    <h4>Start Without Proof</h4>
+                    <p>No data. No guarantee. Just a direction and the willingness to begin.</p>
+                </div>
+                <div class="fw-step">
+                    <div class="fw-num">02</div>
+                    <h4>Survive the Middle</h4>
+                    <p>Confidence dips. Confusion shows up. This is where most people quit. Don't.</p>
+                </div>
+                <div class="fw-step">
+                    <div class="fw-num">03</div>
+                    <h4>Adapt with Technology</h4>
+                    <p>From dial phones to AI. The industry evolves. Adapt or become irrelevant.</p>
+                </div>
+                <div class="fw-step">
+                    <div class="fw-num">04</div>
+                    <h4>Connect the Dots</h4>
+                    <p>Build an ecosystem. Different experiences connect into something meaningful.</p>
+                </div>
+                <div class="fw-step">
+                    <div class="fw-num">05</div>
+                    <h4>Document Everything</h4>
+                    <p>Your journey is the treasure. Books, videos, podcasts. Leave it for the next generation.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA -->
+<section>
+    <div class="container" style="text-align: center; padding: 3rem 0 5rem;">
+        <div class="reveal">
+            <h2 style="font-size: 2rem; margin-bottom: 1rem;">This isn't a typical podcast.</h2>
+            <p style="color: var(--text-dim); max-width: 460px; margin: 0 auto 2rem;">Watch this not for answers, but for better questions.</p>
+            <a href="https://youtu.be/qsFZt82hor0" target="_blank" class="watch-btn">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                Watch the Full Episode
+            </a>
+        </div>
+    </div>
+</section>
+
+<footer>
+    <p>Content from <a href="https://youtu.be/qsFZt82hor0" target="_blank">Multiple Dots Podcast</a> with Dharaneedharan &amp; Jetson | Page by Shaid with Claude Code</p>
+</footer>
+
+<script>
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) entry.target.classList.add('visible');
+        });
+    }, { threshold: 0.08, rootMargin: '0px 0px -30px 0px' });
+
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>
+
+</body>
+</html>
