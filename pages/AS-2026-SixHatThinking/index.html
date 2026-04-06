@@ -1,0 +1,2128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AS 2026 Session - Six Thinking Hats</title>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --navy: #1e2235;
+  --navy-deep: #141726;
+  --navy-light: #2a2f4a;
+  --cream: #f5f0e8;
+  --cream-dark: #e8e0d0;
+  --white-hat: #e8e4de;
+  --red-hat: #d94f4f;
+  --black-hat: #2d3142;
+  --yellow-hat: #e8b93c;
+  --green-hat: #4caf6a;
+  --blue-hat: #4a7fb5;
+  --text-light: #f5f0e8;
+  --text-dark: #1e2235;
+  --text-muted: #8a8a9a;
+  --gold-accent: #c9a84c;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--navy-deep);
+  color: var(--text-light);
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Grain overlay */
+body::after {
+  content: '';
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  pointer-events: none;
+  z-index: 9999;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  opacity: 0.4;
+}
+
+.section-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 1.5rem;
+}
+
+h1, h2, h3 {
+  font-family: 'Instrument Serif', serif;
+}
+
+/* ============== HERO ============== */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  position: relative;
+  padding: 2rem;
+  background: radial-gradient(ellipse at 30% 50%, rgba(74,127,181,0.08) 0%, transparent 60%),
+              radial-gradient(ellipse at 70% 30%, rgba(217,79,79,0.06) 0%, transparent 50%),
+              var(--navy-deep);
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 600px;
+  height: 600px;
+  border: 1px solid rgba(255,255,255,0.03);
+  border-radius: 50%;
+}
+
+.hero-hats {
+  display: flex;
+  gap: 1.2rem;
+  margin-bottom: 3rem;
+  opacity: 0;
+  transform: translateY(30px);
+}
+
+.hero-hat {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.85rem;
+  color: white;
+  position: relative;
+}
+
+.hero-hat.wh { background: var(--white-hat); color: var(--navy); }
+.hero-hat.rh { background: var(--red-hat); }
+.hero-hat.bkh { background: var(--black-hat); }
+.hero-hat.yh { background: var(--yellow-hat); color: var(--navy); }
+.hero-hat.gh { background: var(--green-hat); }
+.hero-hat.blh { background: var(--blue-hat); }
+
+.hero h1 {
+  font-size: clamp(3.5rem, 8vw, 7rem);
+  line-height: 0.95;
+  letter-spacing: -0.03em;
+  margin-bottom: 1.5rem;
+  opacity: 0;
+  transform: translateY(40px);
+}
+
+.hero h1 span {
+  display: block;
+  font-style: italic;
+  color: var(--gold-accent);
+  font-size: 0.55em;
+  margin-top: 0.3em;
+  letter-spacing: 0;
+}
+
+.hero-meta {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.75rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+.hero-meta span { margin: 0 1rem; opacity: 0.3; }
+
+.hero-subtitle {
+  max-width: 600px;
+  font-size: 1.15rem;
+  line-height: 1.7;
+  color: rgba(245,240,232,0.6);
+  margin-top: 2rem;
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+.scroll-indicator {
+  position: absolute;
+  bottom: 3rem;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  opacity: 0;
+}
+
+.scroll-indicator span {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.scroll-line {
+  width: 1px;
+  height: 40px;
+  background: linear-gradient(to bottom, var(--gold-accent), transparent);
+  animation: scrollPulse 2s ease-in-out infinite;
+}
+
+@keyframes scrollPulse {
+  0%, 100% { opacity: 0.3; transform: scaleY(0.5); }
+  50% { opacity: 1; transform: scaleY(1); }
+}
+
+/* ============== MARQUEE ============== */
+.marquee-section {
+  padding: 2rem 0;
+  overflow: hidden;
+  border-top: 1px solid rgba(255,255,255,0.05);
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+  background: var(--navy);
+}
+
+.marquee-track {
+  display: flex;
+  gap: 4rem;
+  white-space: nowrap;
+  animation: marqueeScroll 30s linear infinite;
+}
+
+.marquee-track span {
+  font-family: 'Instrument Serif', serif;
+  font-size: clamp(3rem, 8vw, 6rem);
+  font-style: italic;
+  color: rgba(255,255,255,0.06);
+  flex-shrink: 0;
+}
+
+.marquee-track .hat-dot {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  vertical-align: middle;
+  margin: 0 0.5rem;
+}
+
+@keyframes marqueeScroll {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+/* ============== PROBLEM SECTION ============== */
+.problem-section {
+  padding: 8rem 2rem;
+  background: var(--cream);
+  color: var(--text-dark);
+  position: relative;
+}
+
+.problem-section .container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.problem-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem;
+  align-items: start;
+  margin-top: 4rem;
+}
+
+.problem-left h2 {
+  font-size: clamp(2.5rem, 5vw, 4rem);
+  line-height: 1;
+  letter-spacing: -0.02em;
+  margin-bottom: 1rem;
+}
+
+.problem-left .highlight {
+  color: var(--red-hat);
+  font-style: italic;
+}
+
+.problem-left p {
+  font-size: 1.1rem;
+  line-height: 1.7;
+  color: rgba(30,34,53,0.6);
+  margin-top: 1.5rem;
+}
+
+.problem-items {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.problem-item {
+  display: flex;
+  gap: 1.2rem;
+  align-items: flex-start;
+  padding: 1.5rem;
+  border-radius: 12px;
+  background: white;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+  opacity: 0;
+  transform: translateX(40px);
+}
+
+.problem-x {
+  font-family: 'Instrument Serif', serif;
+  font-size: 1.5rem;
+  color: var(--red-hat);
+  font-weight: 700;
+  flex-shrink: 0;
+  line-height: 1;
+  margin-top: 2px;
+}
+
+.problem-item h4 {
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 700;
+  font-size: 1rem;
+  margin-bottom: 0.3rem;
+}
+
+.problem-item p {
+  font-size: 0.9rem;
+  line-height: 1.5;
+  color: rgba(30,34,53,0.6);
+}
+
+.stat-callout {
+  margin-top: 3rem;
+  padding: 2rem;
+  background: linear-gradient(135deg, rgba(74,127,181,0.08), rgba(74,127,181,0.02));
+  border-radius: 16px;
+  text-align: center;
+  border: 1px solid rgba(74,127,181,0.1);
+}
+
+.stat-number {
+  font-family: 'Instrument Serif', serif;
+  font-size: 4rem;
+  color: var(--blue-hat);
+  line-height: 1;
+}
+
+.stat-label {
+  font-size: 0.95rem;
+  font-weight: 600;
+  margin-top: 0.3rem;
+}
+
+.stat-source {
+  font-size: 0.8rem;
+  color: rgba(30,34,53,0.4);
+  margin-top: 0.3rem;
+}
+
+/* ============== CORE INSIGHT ============== */
+.insight-section {
+  padding: 8rem 2rem;
+  background: var(--navy-deep);
+  position: relative;
+  overflow: hidden;
+}
+
+.insight-section .container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.insight-section h2 {
+  font-size: clamp(2.5rem, 5vw, 3.5rem);
+  line-height: 1.05;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.insight-section h2 em {
+  color: var(--gold-accent);
+}
+
+.insight-subtitle {
+  text-align: center;
+  font-size: 1.1rem;
+  color: var(--text-muted);
+  margin-bottom: 4rem;
+}
+
+.versus-grid {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: 2rem;
+  align-items: stretch;
+}
+
+.versus-card {
+  padding: 2.5rem;
+  border-radius: 16px;
+  position: relative;
+  opacity: 0;
+}
+
+.versus-card.adversarial {
+  background: linear-gradient(135deg, rgba(217,79,79,0.08), rgba(217,79,79,0.02));
+  border: 1px solid rgba(217,79,79,0.15);
+  transform: translateX(-60px);
+}
+
+.versus-card.parallel {
+  background: linear-gradient(135deg, rgba(74,127,181,0.08), rgba(74,127,181,0.02));
+  border: 1px solid rgba(74,127,181,0.15);
+  transform: translateX(60px);
+}
+
+.versus-card h3 {
+  font-size: 1.8rem;
+  margin-bottom: 0.3rem;
+}
+
+.versus-card.adversarial h3 { color: var(--red-hat); }
+.versus-card.parallel h3 { color: var(--blue-hat); }
+
+.versus-card .card-sub {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  margin-bottom: 2rem;
+}
+
+.versus-card ul {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.versus-card ul li {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.8rem;
+  font-size: 0.95rem;
+  line-height: 1.4;
+  color: rgba(245,240,232,0.8);
+}
+
+.versus-card ul li .icon {
+  flex-shrink: 0;
+  font-size: 0.85rem;
+  margin-top: 2px;
+}
+
+.versus-card.adversarial .icon { color: var(--red-hat); }
+.versus-card.parallel .icon { color: var(--green-hat); }
+
+.versus-divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.vs-circle {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: var(--navy-light);
+  border: 2px solid rgba(255,255,255,0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Instrument Serif', serif;
+  font-size: 1.2rem;
+  font-style: italic;
+  color: var(--text-muted);
+}
+
+.insight-quote {
+  text-align: center;
+  margin-top: 4rem;
+  padding: 2.5rem;
+  background: rgba(255,255,255,0.03);
+  border-radius: 16px;
+  border: 1px solid rgba(255,255,255,0.05);
+}
+
+.insight-quote p {
+  font-family: 'Instrument Serif', serif;
+  font-size: 1.4rem;
+  font-style: italic;
+  color: var(--gold-accent);
+  line-height: 1.6;
+}
+
+.insight-quote .attribution {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.8rem;
+  font-style: normal;
+  color: var(--text-muted);
+  margin-top: 0.8rem;
+}
+
+/* ============== SIX HATS OVERVIEW ============== */
+.hats-overview {
+  padding: 8rem 2rem;
+  background: var(--cream);
+  color: var(--text-dark);
+}
+
+.hats-overview .container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.hats-overview h2 {
+  font-size: clamp(2.5rem, 5vw, 3.5rem);
+  line-height: 1.05;
+  text-align: center;
+  margin-bottom: 0.5rem;
+}
+
+.hats-overview .subtitle {
+  text-align: center;
+  font-size: 1.1rem;
+  color: rgba(30,34,53,0.5);
+  margin-bottom: 4rem;
+}
+
+.hats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+}
+
+.hat-card {
+  padding: 2rem;
+  border-radius: 16px;
+  background: white;
+  position: relative;
+  overflow: hidden;
+  opacity: 0;
+  transform: translateY(40px);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.hat-card:hover {
+  transform: translateY(-4px) !important;
+  box-shadow: 0 12px 40px rgba(0,0,0,0.08);
+}
+
+.hat-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 100%;
+}
+
+.hat-card.white-card::before { background: var(--white-hat); }
+.hat-card.red-card::before { background: var(--red-hat); }
+.hat-card.black-card::before { background: var(--black-hat); }
+.hat-card.yellow-card::before { background: var(--yellow-hat); }
+.hat-card.green-card::before { background: var(--green-hat); }
+.hat-card.blue-card::before { background: var(--blue-hat); }
+
+.hat-card-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.2rem;
+}
+
+.hat-circle {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.9rem;
+  color: white;
+  flex-shrink: 0;
+}
+
+.hat-circle.wh { background: #c5c0b8; color: var(--navy); }
+.hat-circle.rh { background: var(--red-hat); }
+.hat-circle.bkh { background: var(--black-hat); }
+.hat-circle.yh { background: var(--yellow-hat); color: var(--navy); }
+.hat-circle.gh { background: var(--green-hat); }
+.hat-circle.blh { background: var(--blue-hat); }
+
+.hat-card-header h3 {
+  font-size: 1.3rem;
+  line-height: 1.2;
+}
+
+.hat-card-header .hat-role {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 500;
+  margin-top: 0.1rem;
+}
+
+.hat-card.white-card .hat-role { color: #8a8580; }
+.hat-card.red-card .hat-role { color: var(--red-hat); }
+.hat-card.black-card .hat-role { color: var(--black-hat); }
+.hat-card.yellow-card .hat-role { color: #b8922e; }
+.hat-card.green-card .hat-role { color: var(--green-hat); }
+.hat-card.blue-card .hat-role { color: var(--blue-hat); }
+
+.hat-card p {
+  font-size: 0.9rem;
+  line-height: 1.6;
+  color: rgba(30,34,53,0.6);
+}
+
+.hat-card .key-question {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(30,34,53,0.06);
+  font-family: 'Instrument Serif', serif;
+  font-size: 1rem;
+  font-style: italic;
+  color: var(--text-dark);
+}
+
+/* ============== DEEP DIVE SECTIONS ============== */
+.hat-deep {
+  padding: 6rem 2rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.hat-deep .container {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.hat-deep-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem;
+  align-items: start;
+}
+
+.hat-deep h2 {
+  font-size: clamp(2rem, 4vw, 3rem);
+  line-height: 1.05;
+  margin-bottom: 0.5rem;
+}
+
+.hat-deep .tagline {
+  font-size: 1rem;
+  margin-bottom: 2.5rem;
+}
+
+.hat-deep .hat-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.4rem 1rem 0.4rem 0.4rem;
+  border-radius: 100px;
+  margin-bottom: 1.5rem;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.hat-badge .badge-circle {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.7rem;
+  color: white;
+}
+
+.rules-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  margin-bottom: 2rem;
+}
+
+.rules-list li {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.8rem;
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+.rules-list .bullet {
+  flex-shrink: 0;
+  margin-top: 6px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+}
+
+.questions-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.questions-list li {
+  font-family: 'Instrument Serif', serif;
+  font-size: 1.05rem;
+  font-style: italic;
+  padding-left: 1rem;
+  border-left: 2px solid;
+  line-height: 1.4;
+}
+
+.case-study {
+  padding: 2rem;
+  border-radius: 16px;
+  margin-bottom: 1.5rem;
+}
+
+.case-study .cs-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  margin-bottom: 0.8rem;
+}
+
+.case-study h4 {
+  font-family: 'Instrument Serif', serif;
+  font-size: 1.4rem;
+  margin-bottom: 0.8rem;
+}
+
+.case-study p {
+  font-size: 0.9rem;
+  line-height: 1.6;
+}
+
+.watch-out {
+  padding: 1.5rem;
+  border-radius: 12px;
+  border: 1px dashed;
+}
+
+.watch-out .wo-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  margin-bottom: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.watch-out p {
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+/* White Hat section */
+.hat-white {
+  background: var(--cream);
+  color: var(--text-dark);
+}
+.hat-white .tagline { color: rgba(30,34,53,0.5); }
+.hat-white .hat-badge { background: rgba(197,192,184,0.2); color: #6b6560; }
+.hat-white .badge-circle { background: #c5c0b8; color: var(--navy); }
+.hat-white .rules-list .bullet { background: #c5c0b8; }
+.hat-white .questions-list li { border-color: #c5c0b8; color: var(--text-dark); }
+.hat-white .case-study { background: rgba(197,192,184,0.12); }
+.hat-white .cs-label { color: #8a8580; }
+.hat-white .watch-out { border-color: var(--red-hat); background: rgba(217,79,79,0.04); }
+.hat-white .wo-label { color: var(--red-hat); }
+.hat-white .watch-out p { color: rgba(30,34,53,0.7); }
+.hat-white .rules-list li { color: rgba(30,34,53,0.8); }
+
+/* Red Hat section */
+.hat-red {
+  background: var(--navy-deep);
+  color: var(--text-light);
+}
+.hat-red h2 { color: var(--red-hat); }
+.hat-red .tagline { color: var(--text-muted); }
+.hat-red .hat-badge { background: rgba(217,79,79,0.1); color: var(--red-hat); }
+.hat-red .badge-circle { background: var(--red-hat); }
+.hat-red .rules-list .bullet { background: var(--red-hat); }
+.hat-red .rules-list li { color: rgba(245,240,232,0.7); }
+.hat-red .questions-list li { border-color: var(--red-hat); color: var(--text-light); }
+.hat-red .case-study { background: rgba(217,79,79,0.06); }
+.hat-red .cs-label { color: var(--red-hat); }
+.hat-red .watch-out { border-color: rgba(217,79,79,0.3); background: rgba(217,79,79,0.05); }
+.hat-red .wo-label { color: var(--red-hat); }
+.hat-red .watch-out p { color: rgba(245,240,232,0.6); }
+
+/* Black Hat section */
+.hat-black {
+  background: #f0ece4;
+  color: var(--text-dark);
+}
+.hat-black h2 { color: var(--black-hat); }
+.hat-black .tagline { color: rgba(30,34,53,0.5); }
+.hat-black .hat-badge { background: rgba(45,49,66,0.08); color: var(--black-hat); }
+.hat-black .badge-circle { background: var(--black-hat); }
+.hat-black .rules-list .bullet { background: var(--black-hat); }
+.hat-black .rules-list li { color: rgba(30,34,53,0.8); }
+.hat-black .questions-list li { border-color: var(--black-hat); color: var(--text-dark); }
+.hat-black .case-study { background: rgba(45,49,66,0.06); }
+.hat-black .cs-label { color: var(--black-hat); }
+.hat-black .watch-out { border-color: var(--red-hat); background: rgba(217,79,79,0.04); }
+.hat-black .wo-label { color: var(--red-hat); }
+.hat-black .watch-out p { color: rgba(30,34,53,0.7); }
+
+/* Yellow Hat section */
+.hat-yellow {
+  background: var(--navy);
+  color: var(--text-light);
+}
+.hat-yellow h2 { color: var(--yellow-hat); }
+.hat-yellow .tagline { color: var(--text-muted); }
+.hat-yellow .hat-badge { background: rgba(232,185,60,0.1); color: var(--yellow-hat); }
+.hat-yellow .badge-circle { background: var(--yellow-hat); color: var(--navy); }
+.hat-yellow .rules-list .bullet { background: var(--yellow-hat); }
+.hat-yellow .rules-list li { color: rgba(245,240,232,0.7); }
+.hat-yellow .questions-list li { border-color: var(--yellow-hat); color: var(--text-light); }
+.hat-yellow .case-study { background: rgba(232,185,60,0.06); }
+.hat-yellow .cs-label { color: var(--yellow-hat); }
+.hat-yellow .watch-out { border-color: rgba(217,79,79,0.3); background: rgba(217,79,79,0.05); }
+.hat-yellow .wo-label { color: var(--red-hat); }
+.hat-yellow .watch-out p { color: rgba(245,240,232,0.6); }
+
+/* Green Hat section */
+.hat-green {
+  background: var(--cream);
+  color: var(--text-dark);
+}
+.hat-green h2 { color: var(--green-hat); }
+.hat-green .tagline { color: rgba(30,34,53,0.5); }
+.hat-green .hat-badge { background: rgba(76,175,106,0.1); color: var(--green-hat); }
+.hat-green .badge-circle { background: var(--green-hat); }
+.hat-green .rules-list .bullet { background: var(--green-hat); }
+.hat-green .rules-list li { color: rgba(30,34,53,0.8); }
+.hat-green .questions-list li { border-color: var(--green-hat); color: var(--text-dark); }
+.hat-green .case-study { background: rgba(76,175,106,0.06); }
+.hat-green .cs-label { color: var(--green-hat); }
+.hat-green .watch-out { border-color: var(--red-hat); background: rgba(217,79,79,0.04); }
+.hat-green .wo-label { color: var(--red-hat); }
+.hat-green .watch-out p { color: rgba(30,34,53,0.7); }
+
+/* Blue Hat section */
+.hat-blue {
+  background: var(--navy-deep);
+  color: var(--text-light);
+}
+.hat-blue h2 { color: var(--blue-hat); }
+.hat-blue .tagline { color: var(--text-muted); }
+.hat-blue .hat-badge { background: rgba(74,127,181,0.1); color: var(--blue-hat); }
+.hat-blue .badge-circle { background: var(--blue-hat); }
+.hat-blue .rules-list .bullet { background: var(--blue-hat); }
+.hat-blue .rules-list li { color: rgba(245,240,232,0.7); }
+.hat-blue .questions-list li { border-color: var(--blue-hat); color: var(--text-light); }
+.hat-blue .case-study { background: rgba(74,127,181,0.06); }
+.hat-blue .cs-label { color: var(--blue-hat); }
+.hat-blue .watch-out { border-color: rgba(217,79,79,0.3); background: rgba(217,79,79,0.05); }
+.hat-blue .wo-label { color: var(--red-hat); }
+.hat-blue .watch-out p { color: rgba(245,240,232,0.6); }
+
+/* ============== HOW TO RUN ============== */
+.run-section {
+  padding: 8rem 2rem;
+  background: linear-gradient(180deg, #f5f0e8 0%, #ede7db 100%);
+  color: var(--text-dark);
+}
+
+.run-section .container {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.run-section h2 {
+  font-size: clamp(2.5rem, 5vw, 3.5rem);
+  line-height: 1.05;
+  text-align: center;
+  margin-bottom: 0.5rem;
+}
+
+.run-section .subtitle {
+  text-align: center;
+  color: rgba(30,34,53,0.5);
+  margin-bottom: 4rem;
+  font-size: 1.1rem;
+}
+
+.steps-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  position: relative;
+}
+
+.steps-list::before {
+  content: '';
+  position: absolute;
+  left: 28px;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: linear-gradient(to bottom, var(--blue-hat), var(--green-hat), var(--yellow-hat));
+  border-radius: 2px;
+}
+
+.step-item {
+  display: flex;
+  gap: 2rem;
+  align-items: flex-start;
+  padding: 2rem 0;
+  opacity: 0;
+  transform: translateY(30px);
+}
+
+.step-number {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: var(--blue-hat);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Instrument Serif', serif;
+  font-size: 1.4rem;
+  flex-shrink: 0;
+  position: relative;
+  z-index: 1;
+}
+
+.step-content h3 {
+  font-size: 1.3rem;
+  margin-bottom: 0.4rem;
+}
+
+.step-content p {
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: rgba(30,34,53,0.6);
+}
+
+.timing-guide {
+  margin-top: 4rem;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+}
+
+.timing-card {
+  padding: 1.5rem;
+  text-align: center;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+}
+
+.timing-card .time {
+  font-family: 'Instrument Serif', serif;
+  font-size: 1.6rem;
+  color: var(--blue-hat);
+  font-weight: 700;
+}
+
+.timing-card .label {
+  font-size: 0.8rem;
+  color: rgba(30,34,53,0.5);
+  margin-top: 0.2rem;
+}
+
+.timing-card .detail {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.7rem;
+  color: rgba(30,34,53,0.35);
+  margin-top: 0.3rem;
+}
+
+/* ============== SEQUENCES ============== */
+.sequences-section {
+  padding: 8rem 2rem;
+  background: var(--navy-deep);
+  color: var(--text-light);
+}
+
+.sequences-section .container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.sequences-section h2 {
+  font-size: clamp(2.5rem, 5vw, 3.5rem);
+  line-height: 1.05;
+  text-align: center;
+  margin-bottom: 0.5rem;
+}
+
+.sequences-section .subtitle {
+  text-align: center;
+  color: var(--text-muted);
+  margin-bottom: 4rem;
+  font-size: 1.1rem;
+}
+
+.sequence-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  background: rgba(255,255,255,0.05);
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.sequence-row {
+  display: grid;
+  grid-template-columns: 200px 1fr 1fr 1.2fr;
+  background: var(--navy);
+  padding: 1.5rem 2rem;
+  align-items: center;
+  gap: 2rem;
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+.sequence-row.header {
+  background: var(--navy-light);
+  opacity: 1;
+  transform: none;
+}
+
+.sequence-row.header span {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.seq-situation h4 {
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 700;
+  font-size: 0.95rem;
+}
+
+.seq-situation p {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  margin-top: 0.15rem;
+}
+
+.seq-hats {
+  display: flex;
+  gap: 0.4rem;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.seq-hat {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: white;
+  position: relative;
+}
+
+.seq-hat.w { background: #c5c0b8; color: var(--navy); }
+.seq-hat.r { background: var(--red-hat); }
+.seq-hat.bk { background: var(--black-hat); }
+.seq-hat.y { background: var(--yellow-hat); color: var(--navy); }
+.seq-hat.g { background: var(--green-hat); }
+.seq-hat.b { background: var(--blue-hat); }
+
+.seq-arrow {
+  color: rgba(255,255,255,0.15);
+  font-size: 0.7rem;
+}
+
+.seq-when {
+  font-size: 0.85rem;
+  line-height: 1.5;
+  color: rgba(245,240,232,0.6);
+}
+
+.seq-tip {
+  font-size: 0.82rem;
+  line-height: 1.5;
+  color: rgba(245,240,232,0.5);
+  font-style: italic;
+}
+
+/* ============== RESOURCES ============== */
+.resources-section {
+  padding: 6rem 2rem;
+  background: var(--navy);
+  color: var(--text-light);
+}
+
+.resources-section .container {
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.resources-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+}
+
+.resource-card {
+  padding: 2rem;
+  border-radius: 16px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+  text-decoration: none;
+  color: var(--text-light);
+  transition: background 0.3s, border-color 0.3s, transform 0.3s;
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.resource-card:hover {
+  background: rgba(255,255,255,0.08);
+  border-color: var(--gold-accent);
+  transform: translateY(-4px);
+}
+
+.resource-icon {
+  color: var(--gold-accent);
+}
+
+.resource-card h4 {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+.resource-card p {
+  font-size: 0.85rem;
+  line-height: 1.5;
+  color: var(--text-muted);
+}
+
+.resource-tag {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--gold-accent);
+  background: rgba(201,168,76,0.1);
+  padding: 0.3rem 0.6rem;
+  border-radius: 4px;
+  align-self: flex-start;
+}
+
+@media (max-width: 768px) {
+  .resources-grid { grid-template-columns: 1fr; }
+}
+
+/* ============== FOOTER ============== */
+.footer {
+  padding: 4rem 2rem;
+  text-align: center;
+  background: var(--navy-deep);
+  border-top: 1px solid rgba(255,255,255,0.05);
+}
+
+.footer p {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  line-height: 1.6;
+}
+
+.footer .credit {
+  font-family: 'Instrument Serif', serif;
+  font-size: 1.1rem;
+  font-style: italic;
+  color: var(--gold-accent);
+  margin-bottom: 0.5rem;
+}
+
+.footer .footer-brand {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-light);
+  margin: 1rem 0 0.8rem;
+  letter-spacing: 1px;
+}
+
+.footer-socials {
+  display: flex;
+  justify-content: center;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+
+.footer-socials a {
+  color: var(--text-muted);
+  text-decoration: none;
+  font-size: 0.85rem;
+  font-weight: 500;
+  transition: color 0.3s;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.footer-socials a:hover {
+  color: var(--gold-accent);
+}
+
+/* ============== RESPONSIVE ============== */
+@media (max-width: 900px) {
+  .problem-grid,
+  .hat-deep-grid,
+  .versus-grid {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
+  .versus-divider { display: none; }
+
+  .hats-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .timing-guide {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .sequence-row {
+    grid-template-columns: 1fr;
+    gap: 0.8rem;
+  }
+
+  .sequence-row.header { display: none; }
+}
+
+/* ============== ANIMATIONS ============== */
+.fade-in {
+  opacity: 0;
+  transform: translateY(30px);
+}
+
+.slide-left {
+  opacity: 0;
+  transform: translateX(-40px);
+}
+
+.slide-right {
+  opacity: 0;
+  transform: translateX(40px);
+}
+
+.scale-in {
+  opacity: 0;
+  transform: scale(0.9);
+}
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-hats">
+    <div class="hero-hat wh">W</div>
+    <div class="hero-hat rh">R</div>
+    <div class="hero-hat bkh">Bk</div>
+    <div class="hero-hat yh">Y</div>
+    <div class="hero-hat gh">G</div>
+    <div class="hero-hat blh">B</div>
+  </div>
+  <div class="section-label" style="color:var(--text-muted); margin-bottom:0.5rem">AS 2026 Session</div>
+  <h1>Six Thinking Hats<span>A Better Way to Think Together</span></h1>
+  <div class="hero-meta">
+    Based on Edward de Bono <span>|</span> 45-Minute Session <span>|</span> Management Team
+  </div>
+  <p class="hero-subtitle">How to run faster, better, ego-free meetings and make decisions your team actually commits to.</p>
+  <div class="scroll-indicator">
+    <span>Scroll to explore</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee-section">
+  <div class="marquee-track">
+    <span>Think Together</span>
+    <span><span class="hat-dot" style="background:var(--white-hat)"></span> Facts</span>
+    <span><span class="hat-dot" style="background:var(--red-hat)"></span> Feelings</span>
+    <span><span class="hat-dot" style="background:var(--black-hat)"></span> Caution</span>
+    <span><span class="hat-dot" style="background:var(--yellow-hat)"></span> Optimism</span>
+    <span><span class="hat-dot" style="background:var(--green-hat)"></span> Creativity</span>
+    <span><span class="hat-dot" style="background:var(--blue-hat)"></span> Process</span>
+    <span>Think Together</span>
+    <span><span class="hat-dot" style="background:var(--white-hat)"></span> Facts</span>
+    <span><span class="hat-dot" style="background:var(--red-hat)"></span> Feelings</span>
+    <span><span class="hat-dot" style="background:var(--black-hat)"></span> Caution</span>
+    <span><span class="hat-dot" style="background:var(--yellow-hat)"></span> Optimism</span>
+    <span><span class="hat-dot" style="background:var(--green-hat)"></span> Creativity</span>
+    <span><span class="hat-dot" style="background:var(--blue-hat)"></span> Process</span>
+  </div>
+</div>
+
+<!-- THE PROBLEM -->
+<section class="problem-section">
+  <div class="container">
+    <div class="section-label" style="color:rgba(30,34,53,0.35)">001 / The Problem</div>
+    <div class="problem-grid">
+      <div class="problem-left">
+        <h2>Why Most Meetings <span class="highlight">Fail</span></h2>
+        <p>The loudest voice wins, not the best idea. People defend positions instead of exploring options. We skip emotions, rush past benefits, or over-index on risks depending on who is in the room.</p>
+        <div class="stat-callout">
+          <div class="stat-number">75%</div>
+          <div class="stat-label">reduction in meeting time</div>
+          <div class="stat-source">Reported by DuPont after adopting Six Hats</div>
+        </div>
+      </div>
+      <div class="problem-items">
+        <div class="problem-item">
+          <span class="problem-x">&times;</span>
+          <div>
+            <h4>Ego Battles</h4>
+            <p>The loudest voice wins, not the best idea. People defend positions instead of exploring options.</p>
+          </div>
+        </div>
+        <div class="problem-item">
+          <span class="problem-x">&times;</span>
+          <div>
+            <h4>Mixed Thinking</h4>
+            <p>Someone is being creative while someone else is poking holes. Nobody is aligned.</p>
+          </div>
+        </div>
+        <div class="problem-item">
+          <span class="problem-x">&times;</span>
+          <div>
+            <h4>Incomplete Analysis</h4>
+            <p>We skip emotions, rush past benefits, or over-index on risks depending on who is in the room.</p>
+          </div>
+        </div>
+        <div class="problem-item">
+          <span class="problem-x">&times;</span>
+          <div>
+            <h4>Time Waste</h4>
+            <p>Meetings take 2 hours to reach conclusions that could take 30 minutes with structure.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CORE INSIGHT -->
+<section class="insight-section">
+  <div class="container">
+    <div class="section-label" style="text-align:center">002 / The Core Insight</div>
+    <h2>Parallel Thinking vs. <em>Adversarial</em> Thinking</h2>
+    <p class="insight-subtitle">One shift that changes everything</p>
+
+    <div class="versus-grid">
+      <div class="versus-card adversarial">
+        <h3>Adversarial</h3>
+        <p class="card-sub">How we think now</p>
+        <ul>
+          <li><span class="icon">&times;</span> Person A argues FOR the idea</li>
+          <li><span class="icon">&times;</span> Person B argues AGAINST the idea</li>
+          <li><span class="icon">&times;</span> Person C defends their territory</li>
+          <li><span class="icon">&times;</span> The best debater wins</li>
+          <li><span class="icon">&times;</span> Quiet voices are never heard</li>
+          <li><span class="icon">&times;</span> Egos drive the outcome</li>
+        </ul>
+      </div>
+      <div class="versus-divider">
+        <div class="vs-circle">vs</div>
+      </div>
+      <div class="versus-card parallel">
+        <h3>Parallel</h3>
+        <p class="card-sub">Six Thinking Hats</p>
+        <ul>
+          <li><span class="icon">&check;</span> Everyone wears the SAME hat together</li>
+          <li><span class="icon">&check;</span> Everyone explores facts together</li>
+          <li><span class="icon">&check;</span> Everyone explores risks together</li>
+          <li><span class="icon">&check;</span> Everyone generates ideas together</li>
+          <li><span class="icon">&check;</span> Every voice is equal under the hat</li>
+          <li><span class="icon">&check;</span> The process drives the outcome</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="insight-quote">
+      <p>The hats separate the THINKER from the THINKING.<br>You are not "being negative." You are wearing the Black Hat. This removes ego from the equation.</p>
+    </div>
+  </div>
+</section>
+
+<!-- SIX HATS AT A GLANCE -->
+<section class="hats-overview">
+  <div class="container">
+    <div class="section-label" style="color:rgba(30,34,53,0.35); text-align:center">003 / The Six Hats</div>
+    <h2>The Six Hats at a Glance</h2>
+    <p class="subtitle">Everyone wears the same hat at the same time.</p>
+    <div class="hats-grid">
+      <div class="hat-card white-card">
+        <div class="hat-card-header">
+          <div class="hat-circle wh">W</div>
+          <div>
+            <h3>White Hat</h3>
+            <div class="hat-role">Facts & Data</div>
+          </div>
+        </div>
+        <p>Objective information only. No opinions, no interpretation. What do we know? What is missing?</p>
+        <div class="key-question">What do we know for certain?</div>
+      </div>
+      <div class="hat-card red-card">
+        <div class="hat-card-header">
+          <div class="hat-circle rh">R</div>
+          <div>
+            <h3>Red Hat</h3>
+            <div class="hat-role">Feelings & Intuition</div>
+          </div>
+        </div>
+        <p>Gut reaction. No justification needed. Everyone participates. 30 seconds per person max.</p>
+        <div class="key-question">What is your gut feeling right now?</div>
+      </div>
+      <div class="hat-card black-card">
+        <div class="hat-card-header">
+          <div class="hat-circle bkh">Bk</div>
+          <div>
+            <h3>Black Hat</h3>
+            <div class="hat-role">Caution & Risks</div>
+          </div>
+        </div>
+        <p>Critical judgment. What could go wrong? Be specific, not vague. Goal is protection, not destruction.</p>
+        <div class="key-question">What could go wrong?</div>
+      </div>
+      <div class="hat-card yellow-card">
+        <div class="hat-card-header">
+          <div class="hat-circle yh">Y</div>
+          <div>
+            <h3>Yellow Hat</h3>
+            <div class="hat-role">Benefits & Optimism</div>
+          </div>
+        </div>
+        <p>Value, benefits, best-case scenarios. This is HARDER than Black Hat. Push the room to find value.</p>
+        <div class="key-question">What are the benefits? Best case?</div>
+      </div>
+      <div class="hat-card green-card">
+        <div class="hat-card-header">
+          <div class="hat-circle gh">G</div>
+          <div>
+            <h3>Green Hat</h3>
+            <div class="hat-role">Creativity & Ideas</div>
+          </div>
+        </div>
+        <p>New ideas, alternatives, lateral thinking. NO judgment whatsoever. Quantity over quality. Filter later.</p>
+        <div class="key-question">What are entirely new approaches?</div>
+      </div>
+      <div class="hat-card blue-card">
+        <div class="hat-card-header">
+          <div class="hat-circle blh">B</div>
+          <div>
+            <h3>Blue Hat</h3>
+            <div class="hat-role">Process & Control</div>
+          </div>
+        </div>
+        <p>Meta-thinking. Managing the process itself. Opens and closes every session. Facilitator wears this.</p>
+        <div class="key-question">What thinking is needed next?</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WHITE HAT DEEP DIVE -->
+<section class="hat-deep hat-white">
+  <div class="container">
+    <div class="hat-deep-grid">
+      <div>
+        <div class="hat-badge"><span class="badge-circle">W</span> Hat 1 of 6</div>
+        <h2>White Hat</h2>
+        <p class="tagline">Objective information. No opinions, no interpretation.</p>
+        <h4 style="font-family:'DM Sans',sans-serif; font-weight:700; margin-bottom:1rem; font-size:0.85rem; text-transform:uppercase; letter-spacing:0.1em">Rules</h4>
+        <ul class="rules-list">
+          <li><span class="bullet"></span> Only verified, factual information</li>
+          <li><span class="bullet"></span> No opinions, arguments, or spin</li>
+          <li><span class="bullet"></span> Explicitly identify what data is MISSING</li>
+          <li><span class="bullet"></span> State sources: "According to the Q3 report..."</li>
+          <li><span class="bullet"></span> Distinguish verified facts from assumptions</li>
+        </ul>
+        <h4 style="font-family:'DM Sans',sans-serif; font-weight:700; margin-bottom:1rem; font-size:0.85rem; text-transform:uppercase; letter-spacing:0.1em">Key Questions</h4>
+        <ul class="questions-list">
+          <li>What do we know for certain?</li>
+          <li>What data do we have? From where?</li>
+          <li>What information is missing?</li>
+          <li>How reliable is this information?</li>
+          <li>What would we need to know to decide?</li>
+        </ul>
+      </div>
+      <div>
+        <div class="case-study">
+          <div class="cs-label">Case Study</div>
+          <h4>DuPont: Product Safety Reviews</h4>
+          <p>DuPont trained 6,000+ employees. White Hat discipline forced teams to separate verified test data from 15-year-old assumptions. Meeting times fell by 75%.</p>
+        </div>
+        <div class="watch-out">
+          <div class="wo-label"><span style="font-size:0.8rem">&#9632;</span> Watch Out</div>
+          <p>People will inject opinions disguised as facts. Redirect: "That sounds like interpretation. What is the actual data?"</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- RED HAT DEEP DIVE -->
+<section class="hat-deep hat-red">
+  <div class="container">
+    <div class="hat-deep-grid">
+      <div>
+        <div class="hat-badge"><span class="badge-circle">R</span> Hat 2 of 6</div>
+        <h2>Red Hat</h2>
+        <p class="tagline">Emotions, gut feelings. No justification required.</p>
+        <h4 style="font-family:'DM Sans',sans-serif; font-weight:700; margin-bottom:1rem; font-size:0.85rem; text-transform:uppercase; letter-spacing:0.1em; color:rgba(245,240,232,0.5)">Rules</h4>
+        <ul class="rules-list">
+          <li><span class="bullet"></span> No need to explain or justify - this IS the point</li>
+          <li><span class="bullet"></span> 30 seconds per person maximum</li>
+          <li><span class="bullet"></span> Everyone participates. No opting out.</li>
+          <li><span class="bullet"></span> Feelings are data. Treat them seriously.</li>
+          <li><span class="bullet"></span> Keep it short: "I feel uneasy" is enough</li>
+        </ul>
+        <h4 style="font-family:'DM Sans',sans-serif; font-weight:700; margin-bottom:1rem; font-size:0.85rem; text-transform:uppercase; letter-spacing:0.1em; color:rgba(245,240,232,0.5)">Key Questions</h4>
+        <ul class="questions-list">
+          <li>What is your gut reaction right now?</li>
+          <li>How do you feel about this proposal?</li>
+          <li>If you had to bet your own money, would you?</li>
+          <li>Are you excited, worried, or neutral?</li>
+          <li>What does your intuition say?</li>
+        </ul>
+      </div>
+      <div>
+        <div class="case-study">
+          <div class="cs-label">Case Study</div>
+          <h4>Siemens: Infrastructure Project</h4>
+          <p>Data looked favorable, but Red Hat revealed deep unease from senior engineers. Extended analysis uncovered a regulatory risk. Project was restructured.</p>
+        </div>
+        <div class="watch-out">
+          <div class="wo-label"><span style="font-size:0.8rem">&#9632;</span> Watch Out</div>
+          <p>People will try to justify their feelings. Stop them: "Just the feeling. One sentence. No explanation."</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BLACK HAT DEEP DIVE -->
+<section class="hat-deep hat-black">
+  <div class="container">
+    <div class="hat-deep-grid">
+      <div>
+        <div class="hat-badge"><span class="badge-circle">Bk</span> Hat 3 of 6</div>
+        <h2>Black Hat</h2>
+        <p class="tagline">Critical judgment. What could go wrong?</p>
+        <h4 style="font-family:'DM Sans',sans-serif; font-weight:700; margin-bottom:1rem; font-size:0.85rem; text-transform:uppercase; letter-spacing:0.1em">Rules</h4>
+        <ul class="rules-list">
+          <li><span class="bullet"></span> Be SPECIFIC: "Supply chain risk in Q2" not "This might fail"</li>
+          <li><span class="bullet"></span> Use it during its turn ONLY - not as default mode</li>
+          <li><span class="bullet"></span> Goal is protection, not destruction</li>
+          <li><span class="bullet"></span> Always follow with Yellow or Green Hat</li>
+          <li><span class="bullet"></span> This is the MOST OVERUSED hat. Discipline it.</li>
+        </ul>
+        <h4 style="font-family:'DM Sans',sans-serif; font-weight:700; margin-bottom:1rem; font-size:0.85rem; text-transform:uppercase; letter-spacing:0.1em">Key Questions</h4>
+        <ul class="questions-list">
+          <li>What could go wrong?</li>
+          <li>What are the risks we have not considered?</li>
+          <li>Does this fit our resources and timeline?</li>
+          <li>What is the worst-case scenario?</li>
+          <li>Are there regulatory or legal concerns?</li>
+        </ul>
+      </div>
+      <div>
+        <div class="case-study">
+          <div class="cs-label">Case Study</div>
+          <h4>British Airways: Route Planning</h4>
+          <p>Before Six Hats, Black Hat thinking killed every new proposal before exploration. Structuring it into a defined phase let creative ideas survive. Innovation rose.</p>
+        </div>
+        <div class="watch-out">
+          <div class="wo-label"><span style="font-size:0.8rem">&#9632;</span> Watch Out</div>
+          <p>This is the hat everyone wants to live in. It makes you look smart. CAP it. Move to Yellow or Green after.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- YELLOW HAT DEEP DIVE -->
+<section class="hat-deep hat-yellow">
+  <div class="container">
+    <div class="hat-deep-grid">
+      <div>
+        <div class="hat-badge"><span class="badge-circle">Y</span> Hat 4 of 6</div>
+        <h2>Yellow Hat</h2>
+        <p class="tagline">Value, benefits, best-case scenarios.</p>
+        <h4 style="font-family:'DM Sans',sans-serif; font-weight:700; margin-bottom:1rem; font-size:0.85rem; text-transform:uppercase; letter-spacing:0.1em; color:rgba(245,240,232,0.5)">Rules</h4>
+        <ul class="rules-list">
+          <li><span class="bullet"></span> Be specific: "Opens the 18-25 market" not "Could be good"</li>
+          <li><span class="bullet"></span> Explore benefits even for ideas you are skeptical of</li>
+          <li><span class="bullet"></span> This is HARDER than Black Hat. Push the room.</li>
+          <li><span class="bullet"></span> Every idea deserves Yellow Hat before Black Hat</li>
+          <li><span class="bullet"></span> Build the case before you stress-test it</li>
+        </ul>
+        <h4 style="font-family:'DM Sans',sans-serif; font-weight:700; margin-bottom:1rem; font-size:0.85rem; text-transform:uppercase; letter-spacing:0.1em; color:rgba(245,240,232,0.5)">Key Questions</h4>
+        <ul class="questions-list">
+          <li>What are the specific benefits?</li>
+          <li>What is the best-case outcome?</li>
+          <li>Who gains and how?</li>
+          <li>What value does this create that does not exist today?</li>
+          <li>Why could this work despite the challenges?</li>
+        </ul>
+      </div>
+      <div>
+        <div class="case-study">
+          <div class="cs-label">Case Study</div>
+          <h4>Prudential: Micro-Insurance Product</h4>
+          <p>A junior analyst's proposal would normally be shot down. Yellow Hat forced the room to explore value first: untapped segment, first-mover advantage. Product piloted.</p>
+        </div>
+        <div class="watch-out">
+          <div class="wo-label"><span style="font-size:0.8rem">&#9632;</span> Watch Out</div>
+          <p>Teams rush through Yellow to get to Black (criticism is easier). INSIST on thorough Yellow. Ask: "What else could be valuable?"</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- GREEN HAT DEEP DIVE -->
+<section class="hat-deep hat-green">
+  <div class="container">
+    <div class="hat-deep-grid">
+      <div>
+        <div class="hat-badge"><span class="badge-circle">G</span> Hat 5 of 6</div>
+        <h2>Green Hat</h2>
+        <p class="tagline">New ideas, alternatives, lateral thinking.</p>
+        <h4 style="font-family:'DM Sans',sans-serif; font-weight:700; margin-bottom:1rem; font-size:0.85rem; text-transform:uppercase; letter-spacing:0.1em">Rules</h4>
+        <ul class="rules-list">
+          <li><span class="bullet"></span> NO judgment whatsoever - not even positive</li>
+          <li><span class="bullet"></span> Quantity over quality. Filter later.</li>
+          <li><span class="bullet"></span> "And also..." never "But..."</li>
+          <li><span class="bullet"></span> Use provocations: "What if we did the opposite?"</li>
+          <li><span class="bullet"></span> Silence is OK. Give people space to think.</li>
+        </ul>
+        <h4 style="font-family:'DM Sans',sans-serif; font-weight:700; margin-bottom:1rem; font-size:0.85rem; text-transform:uppercase; letter-spacing:0.1em">Key Questions</h4>
+        <ul class="questions-list">
+          <li>What are entirely new approaches?</li>
+          <li>What if we removed all constraints?</li>
+          <li>What would a competitor do with this?</li>
+          <li>Can we combine two ideas into something new?</li>
+          <li>What is the most radical option available?</li>
+        </ul>
+      </div>
+      <div>
+        <div class="case-study">
+          <div class="cs-label">Case Study</div>
+          <h4>NASA: Mission Engineering</h4>
+          <p>Green Hat sessions separate idea generation from evaluation. Engineers trained to not self-censor. The non-obvious solution often saves the mission.</p>
+        </div>
+        <div class="watch-out">
+          <div class="wo-label"><span style="font-size:0.8rem">&#9632;</span> Watch Out</div>
+          <p>The moment someone says "That will not work," Green Hat is dead. Enforce ruthlessly: "Save that for Black Hat."</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BLUE HAT DEEP DIVE -->
+<section class="hat-deep hat-blue">
+  <div class="container">
+    <div class="hat-deep-grid">
+      <div>
+        <div class="hat-badge"><span class="badge-circle">B</span> Hat 6 of 6</div>
+        <h2>Blue Hat</h2>
+        <p class="tagline">Meta-thinking. Managing the process itself.</p>
+        <h4 style="font-family:'DM Sans',sans-serif; font-weight:700; margin-bottom:1rem; font-size:0.85rem; text-transform:uppercase; letter-spacing:0.1em; color:rgba(245,240,232,0.5)">Rules</h4>
+        <ul class="rules-list">
+          <li><span class="bullet"></span> Opens and closes EVERY session</li>
+          <li><span class="bullet"></span> Usually worn by the facilitator throughout</li>
+          <li><span class="bullet"></span> Decides which hat comes next</li>
+          <li><span class="bullet"></span> Summarizes after each hat phase</li>
+          <li><span class="bullet"></span> Calls out violations: "That is Black Hat. We are on Yellow."</li>
+        </ul>
+        <h4 style="font-family:'DM Sans',sans-serif; font-weight:700; margin-bottom:1rem; font-size:0.85rem; text-transform:uppercase; letter-spacing:0.1em; color:rgba(245,240,232,0.5)">Key Questions</h4>
+        <ul class="questions-list">
+          <li>What is our objective for this session?</li>
+          <li>What thinking is needed right now?</li>
+          <li>Which hat should we wear next?</li>
+          <li>Let me summarize what we have found so far.</li>
+          <li>What is our conclusion and what are the next steps?</li>
+        </ul>
+      </div>
+      <div>
+        <div class="case-study">
+          <div class="cs-label">Case Study</div>
+          <h4>IBM: Strategic Planning</h4>
+          <p>IBM trained dedicated Blue Hat facilitators. Multi-day planning meetings completed in hours. Dominant personalities neutralized by process. Rolled out globally.</p>
+        </div>
+        <div class="watch-out">
+          <div class="wo-label"><span style="font-size:0.8rem">&#9632;</span> Watch Out</div>
+          <p>Without a strong Blue Hat facilitator, the method collapses. Assign this role explicitly. It is not optional.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW TO RUN A SESSION -->
+<section class="run-section">
+  <div class="container">
+    <div class="section-label" style="color:rgba(30,34,53,0.35); text-align:center">004 / Facilitation</div>
+    <h2>How to Run a Session</h2>
+    <p class="subtitle">Structure, timing, and facilitation rules</p>
+
+    <div class="steps-list">
+      <div class="step-item">
+        <div class="step-number">1</div>
+        <div class="step-content">
+          <h3>Assign a Blue Hat Facilitator</h3>
+          <p>Manages process. Does NOT contribute opinions. Calls hat switches and summarizes.</p>
+        </div>
+      </div>
+      <div class="step-item">
+        <div class="step-number">2</div>
+        <div class="step-content">
+          <h3>Define the Topic (Blue Hat)</h3>
+          <p>State the problem or decision clearly. Write it where everyone can see it. 1 minute.</p>
+        </div>
+      </div>
+      <div class="step-item">
+        <div class="step-number">3</div>
+        <div class="step-content">
+          <h3>Cycle Through the Hats</h3>
+          <p>Use a sequence appropriate to your situation. 2-5 minutes per hat.</p>
+        </div>
+      </div>
+      <div class="step-item">
+        <div class="step-number">4</div>
+        <div class="step-content">
+          <h3>Enforce Hat Discipline</h3>
+          <p>If someone is doing Black Hat during Yellow Hat, call it. "Save that for Black Hat."</p>
+        </div>
+      </div>
+      <div class="step-item">
+        <div class="step-number">5</div>
+        <div class="step-content">
+          <h3>Summarize After Each Hat</h3>
+          <p>Blue Hat captures key outputs before switching. Creates a clear record.</p>
+        </div>
+      </div>
+      <div class="step-item">
+        <div class="step-number">6</div>
+        <div class="step-content">
+          <h3>Close with Blue Hat</h3>
+          <p>Summarize findings. State decision. Define next steps. Assign owners.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="timing-guide">
+      <div class="timing-card">
+        <div class="time">18 min</div>
+        <div class="label">Simple Decision</div>
+        <div class="detail">3 min/hat</div>
+      </div>
+      <div class="timing-card">
+        <div class="time">30 min</div>
+        <div class="label">Standard Meeting</div>
+        <div class="detail">5 min/hat</div>
+      </div>
+      <div class="timing-card">
+        <div class="time">45-60 min</div>
+        <div class="label">Complex Strategy</div>
+        <div class="detail">repeat hats</div>
+      </div>
+      <div class="timing-card">
+        <div class="time">2-3 hrs</div>
+        <div class="label">Full Workshop</div>
+        <div class="detail">multiple rounds</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SEQUENCES -->
+<section class="sequences-section">
+  <div class="container">
+    <div class="section-label" style="text-align:center">005 / Sequences</div>
+    <h2>Recommended Hat Sequences</h2>
+    <p class="subtitle">Blue Hat always opens and closes. Adapt the middle to your situation.</p>
+
+    <div class="sequence-grid">
+      <div class="sequence-row header">
+        <span>Situation</span>
+        <span>Sequence</span>
+        <span>When to Use</span>
+        <span>Facilitator Tips</span>
+      </div>
+
+      <div class="sequence-row">
+        <div class="seq-situation">
+          <h4>Initial Exploration</h4>
+          <p>Starting from scratch</p>
+        </div>
+        <div class="seq-hats">
+          <div class="seq-hat b">B</div><span class="seq-arrow">&#8594;</span>
+          <div class="seq-hat w">W</div><span class="seq-arrow">&#8594;</span>
+          <div class="seq-hat g">G</div><span class="seq-arrow">&#8594;</span>
+          <div class="seq-hat y">Y</div><span class="seq-arrow">&#8594;</span>
+          <div class="seq-hat bk">Bk</div><span class="seq-arrow">&#8594;</span>
+          <div class="seq-hat r">R</div><span class="seq-arrow">&#8594;</span>
+          <div class="seq-hat b">B</div>
+        </div>
+        <div class="seq-when">New project kickoff, brainstorming sessions, early-stage ideation</div>
+        <div class="seq-tip">Green comes early to maximize idea generation before critical filters kick in. Yellow before Black ensures ideas get a fair hearing.</div>
+      </div>
+
+      <div class="sequence-row">
+        <div class="seq-situation">
+          <h4>Idea Evaluation</h4>
+          <p>Assessing a specific proposal</p>
+        </div>
+        <div class="seq-hats">
+          <div class="seq-hat b">B</div><span class="seq-arrow">&#8594;</span>
+          <div class="seq-hat w">W</div><span class="seq-arrow">&#8594;</span>
+          <div class="seq-hat y">Y</div><span class="seq-arrow">&#8594;</span>
+          <div class="seq-hat bk">Bk</div><span class="seq-arrow">&#8594;</span>
+          <div class="seq-hat g">G</div><span class="seq-arrow">&#8594;</span>
+          <div class="seq-hat r">R</div><span class="seq-arrow">&#8594;</span>
+          <div class="seq-hat b">B</div>
+        </div>
+        <div class="seq-when">Evaluating a business case, reviewing a proposal, go/no-go decisions</div>
+        <div class="seq-tip">Yellow before Black is critical - explore value before poking holes. Green after Black lets you solve problems the risk analysis surfaced.</div>
+      </div>
+
+      <div class="sequence-row">
+        <div class="seq-situation">
+          <h4>Problem Solving</h4>
+          <p>Something is broken</p>
+        </div>
+        <div class="seq-hats">
+          <div class="seq-hat b">B</div><span class="seq-arrow">&#8594;</span>
+          <div class="seq-hat r">R</div><span class="seq-arrow">&#8594;</span>
+          <div class="seq-hat w">W</div><span class="seq-arrow">&#8594;</span>
+          <div class="seq-hat bk">Bk</div><span class="seq-arrow">&#8594;</span>
+          <div class="seq-hat g">G</div><span class="seq-arrow">&#8594;</span>
+          <div class="seq-hat y">Y</div><span class="seq-arrow">&#8594;</span>
+          <div class="seq-hat b">B</div>
+        </div>
+        <div class="seq-when">Post-mortem, fixing failures, process breakdowns, customer complaints</div>
+        <div class="seq-tip">Red first - let people vent frustration before analyzing. Black diagnoses what went wrong. Green generates fixes. Yellow validates them.</div>
+      </div>
+
+      <div class="sequence-row">
+        <div class="seq-situation">
+          <h4>Quick Decision</h4>
+          <p>Time-pressured choice</p>
+        </div>
+        <div class="seq-hats">
+          <div class="seq-hat b">B</div><span class="seq-arrow">&#8594;</span>
+          <div class="seq-hat w">W</div><span class="seq-arrow">&#8594;</span>
+          <div class="seq-hat y">Y</div><span class="seq-arrow">&#8594;</span>
+          <div class="seq-hat bk">Bk</div><span class="seq-arrow">&#8594;</span>
+          <div class="seq-hat r">R</div><span class="seq-arrow">&#8594;</span>
+          <div class="seq-hat b">B</div>
+        </div>
+        <div class="seq-when">Urgent decisions, time-boxed meetings, rapid prioritization</div>
+        <div class="seq-tip">Compressed sequence - skip Green if the options are already on the table. Red at the end serves as a tiebreaker.</div>
+      </div>
+
+      <div class="sequence-row">
+        <div class="seq-situation">
+          <h4>Strategic Planning</h4>
+          <p>Major decisions, high stakes</p>
+        </div>
+        <div class="seq-hats">
+          <div class="seq-hat b">B</div><span class="seq-arrow">&#8594;</span>
+          <div class="seq-hat w">W</div><span class="seq-arrow">&#8594;</span>
+          <div class="seq-hat r">R</div><span class="seq-arrow">&#8594;</span>
+          <div class="seq-hat g">G</div><span class="seq-arrow">&#8594;</span>
+          <div class="seq-hat y">Y</div><span class="seq-arrow">&#8594;</span>
+          <div class="seq-hat bk">Bk</div><span class="seq-arrow">&#8594;</span>
+          <div class="seq-hat g">G</div><span class="seq-arrow">&#8594;</span>
+          <div class="seq-hat r">R</div><span class="seq-arrow">&#8594;</span>
+          <div class="seq-hat b">B</div>
+        </div>
+        <div class="seq-when">Annual planning, market entry, M&A, major investment decisions</div>
+        <div class="seq-tip">Double Green pass: first to generate options, second to solve risks found by Black. Double Red: early gut check + final intuition read.</div>
+      </div>
+
+      <div class="sequence-row">
+        <div class="seq-situation">
+          <h4>Crisis Response</h4>
+          <p>Urgent, emotional situation</p>
+        </div>
+        <div class="seq-hats">
+          <div class="seq-hat b">B</div><span class="seq-arrow">&#8594;</span>
+          <div class="seq-hat r">R</div><span class="seq-arrow">&#8594;</span>
+          <div class="seq-hat w">W</div><span class="seq-arrow">&#8594;</span>
+          <div class="seq-hat bk">Bk</div><span class="seq-arrow">&#8594;</span>
+          <div class="seq-hat g">G</div><span class="seq-arrow">&#8594;</span>
+          <div class="seq-hat y">Y</div><span class="seq-arrow">&#8594;</span>
+          <div class="seq-hat r">R</div><span class="seq-arrow">&#8594;</span>
+          <div class="seq-hat b">B</div>
+        </div>
+        <div class="seq-when">PR crisis, security incident, market shock, organizational emergency</div>
+        <div class="seq-tip">Red FIRST - acknowledge emotions before analysis. People cannot think clearly until feelings are surfaced. Second Red at end.</div>
+      </div>
+
+      <div class="sequence-row">
+        <div class="seq-situation">
+          <h4>Innovation Session</h4>
+          <p>Generating new possibilities</p>
+        </div>
+        <div class="seq-hats">
+          <div class="seq-hat b">B</div><span class="seq-arrow">&#8594;</span>
+          <div class="seq-hat w">W</div><span class="seq-arrow">&#8594;</span>
+          <div class="seq-hat g">G</div><span class="seq-arrow">&#8594;</span>
+          <div class="seq-hat g">G</div><span class="seq-arrow">&#8594;</span>
+          <div class="seq-hat y">Y</div><span class="seq-arrow">&#8594;</span>
+          <div class="seq-hat bk">Bk</div><span class="seq-arrow">&#8594;</span>
+          <div class="seq-hat g">G</div><span class="seq-arrow">&#8594;</span>
+          <div class="seq-hat b">B</div>
+        </div>
+        <div class="seq-when">Product development, R&D, hackathons, "what's next" workshops</div>
+        <div class="seq-tip">Triple Green: extended creative phases with minimal filtering. Black is deliberately late and brief - protect creative momentum.</div>
+      </div>
+
+      <div class="sequence-row">
+        <div class="seq-situation">
+          <h4>Conflict Resolution</h4>
+          <p>Opposing views, deadlocked</p>
+        </div>
+        <div class="seq-hats">
+          <div class="seq-hat b">B</div><span class="seq-arrow">&#8594;</span>
+          <div class="seq-hat r">R</div><span class="seq-arrow">&#8594;</span>
+          <div class="seq-hat w">W</div><span class="seq-arrow">&#8594;</span>
+          <div class="seq-hat y">Y</div><span class="seq-arrow">&#8594;</span>
+          <div class="seq-hat y">Y</div><span class="seq-arrow">&#8594;</span>
+          <div class="seq-hat bk">Bk</div><span class="seq-arrow">&#8594;</span>
+          <div class="seq-hat g">G</div><span class="seq-arrow">&#8594;</span>
+          <div class="seq-hat r">R</div><span class="seq-arrow">&#8594;</span>
+          <div class="seq-hat b">B</div>
+        </div>
+        <div class="seq-when">Team disagreements, stakeholder conflicts, merger integration</div>
+        <div class="seq-tip">Double Yellow: each side must find value in the OTHER side's position. This breaks ego locks. Red bookends surface hidden emotions.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- RESOURCES -->
+<section class="resources-section">
+  <div class="container">
+    <div class="section-label" style="text-align:center">006 / Resources</div>
+    <h2 style="font-family:'Instrument Serif',serif; font-size:clamp(2rem,4vw,3rem); text-align:center; margin-bottom:0.5rem;">Download & Print</h2>
+    <p style="text-align:center; color:var(--text-muted); margin-bottom:3rem;">Session materials for your team</p>
+    <div class="resources-grid">
+      <a href="six_hats_presentation_mew 2.pdf" class="resource-card" download>
+        <div class="resource-icon">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><polyline points="9 15 12 18 15 15"/></svg>
+        </div>
+        <h4>Full Presentation</h4>
+        <p>Complete slide deck with all 22 slides, case studies, and speaker notes</p>
+        <span class="resource-tag">PDF</span>
+      </a>
+      <a href="hat_sequences_a4.pdf" class="resource-card" download>
+        <div class="resource-icon">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><polyline points="9 15 12 18 15 15"/></svg>
+        </div>
+        <h4>Hat Sequences</h4>
+        <p>Recommended sequences for 9 situations, printable A4 reference</p>
+        <span class="resource-tag">PDF</span>
+      </a>
+      <a href="six_hats_worksheet.pdf" class="resource-card" download>
+        <div class="resource-icon">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><polyline points="9 15 12 18 15 15"/></svg>
+        </div>
+        <h4>Facilitation Worksheet</h4>
+        <p>Fill-in worksheet with all 6 hats, rules, and questions to guide your session</p>
+        <span class="resource-tag">PDF</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <p class="credit">Based on Edward de Bono's Six Thinking Hats</p>
+  <div class="footer-brand">Built by Shaid</div>
+  <div class="footer-socials">
+    <a href="https://www.instagram.com/ai360_with_shaid" target="_blank">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+      ai360_with_shaid
+    </a>
+    <a href="https://www.linkedin.com/in/muhibbuddin-shaid-hakkeem-26a06921/" target="_blank">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+      LinkedIn
+    </a>
+    <a href="https://youtube.com/@ai360_with_shaid" target="_blank">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"/></svg>
+      YouTube
+    </a>
+    <a href="https://www.shaid360.com" target="_blank">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm1 16.057v-3.057h2.994c-.059 1.143-.212 2.24-.456 3.279-.823-.12-1.674-.188-2.538-.222zm1.957 2.162c-.499 1.33-1.159 2.497-1.957 3.456v-3.62c.666.028 1.319.081 1.957.164zm-1.957-7.219v-3.015c.868-.034 1.721-.103 2.548-.224.238 1.027.389 2.111.446 3.239h-2.994zm0-5.014v-3.661c.806.969 1.471 2.15 1.971 3.496-.642.084-1.3.137-1.971.165zm2.703-3.267c1.237.496 2.354 1.228 3.29 2.146-.642.234-1.311.442-2.019.607-.344-.992-.775-1.91-1.271-2.753zm-7.241 13.56c-.244-1.039-.398-2.136-.456-3.279h2.994v3.057c-.865.034-1.714.102-2.538.222zm2.538 1.776v3.62c-.798-.959-1.458-2.126-1.957-3.456.638-.083 1.291-.136 1.957-.164zm-2.994-7.055c.057-1.128.207-2.212.446-3.239.827.121 1.68.19 2.548.224v3.015h-2.994zm1.024-5.179c.5-1.346 1.165-2.527 1.97-3.496v3.661c-.671-.028-1.329-.081-1.97-.165zm-2.005-.35c-.708-.165-1.377-.373-2.018-.607.937-.918 2.053-1.65 3.29-2.146-.496.844-.927 1.762-1.272 2.753zm-.549 1.918c-.264 1.151-.434 2.36-.492 3.611h-3.933c.165-1.658.739-3.197 1.617-4.518.88.361 1.816.67 2.808.907zm-.009 9.262c-.988.236-1.92.542-2.797.9-.89-1.328-1.471-2.879-1.637-4.551h3.934c.058 1.265.231 2.488.5 3.651zm.553 1.917c.342.976.768 1.881 1.257 2.712-1.223-.49-2.326-1.211-3.256-2.115.636-.229 1.299-.435 1.999-.597zm9.924 0c.7.163 1.362.369 1.999.597-.931.903-2.034 1.625-3.257 2.116.489-.832.915-1.737 1.258-2.713zm.553-1.917c.27-1.163.442-2.386.501-3.651h3.934c-.167 1.672-.748 3.223-1.638 4.551-.877-.358-1.81-.664-2.797-.9zm.501-5.651c-.058-1.251-.229-2.46-.492-3.611.992-.237 1.929-.546 2.809-.907.877 1.321 1.451 2.86 1.616 4.518h-3.933z"/></svg>
+      shaid360.com
+    </a>
+  </div>
+  <p style="margin-top: 20px; font-size: 0.75rem; letter-spacing: 2px; color: var(--text-muted);">SOCIAL EAGLE AI ACADEMY</p>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script>
+gsap.registerPlugin(ScrollTrigger);
+
+// Hero animations
+const heroTl = gsap.timeline({ delay: 0.3 });
+heroTl
+  .to('.hero-hats', { opacity: 1, y: 0, duration: 0.8, ease: 'power3.out' })
+  .to('.hero h1', { opacity: 1, y: 0, duration: 1, ease: 'power3.out' }, '-=0.4')
+  .to('.hero-meta', { opacity: 1, y: 0, duration: 0.6, ease: 'power3.out' }, '-=0.5')
+  .to('.hero-subtitle', { opacity: 1, y: 0, duration: 0.6, ease: 'power3.out' }, '-=0.3')
+  .to('.scroll-indicator', { opacity: 1, duration: 0.6, ease: 'power3.out' }, '-=0.2');
+
+// Stagger hero hat circles
+gsap.from('.hero-hat', {
+  scale: 0,
+  opacity: 0,
+  duration: 0.4,
+  stagger: 0.08,
+  delay: 0.5,
+  ease: 'back.out(2)'
+});
+
+// Problem items
+gsap.utils.toArray('.problem-item').forEach((item, i) => {
+  gsap.to(item, {
+    opacity: 1,
+    x: 0,
+    duration: 0.6,
+    delay: i * 0.12,
+    ease: 'power3.out',
+    scrollTrigger: { trigger: item, start: 'top 85%' }
+  });
+});
+
+// Stat counter
+ScrollTrigger.create({
+  trigger: '.stat-number',
+  start: 'top 80%',
+  onEnter: () => {
+    const counter = { val: 0 };
+    gsap.to(counter, {
+      val: 75,
+      duration: 2,
+      ease: 'power2.out',
+      onUpdate: () => {
+        document.querySelector('.stat-number').textContent = Math.round(counter.val) + '%';
+      }
+    });
+  },
+  once: true
+});
+
+// Versus cards
+gsap.to('.versus-card.adversarial', {
+  opacity: 1, x: 0, duration: 0.8, ease: 'power3.out',
+  scrollTrigger: { trigger: '.versus-grid', start: 'top 75%' }
+});
+gsap.to('.versus-card.parallel', {
+  opacity: 1, x: 0, duration: 0.8, ease: 'power3.out', delay: 0.2,
+  scrollTrigger: { trigger: '.versus-grid', start: 'top 75%' }
+});
+
+// Hat overview cards
+gsap.utils.toArray('.hat-card').forEach((card, i) => {
+  gsap.to(card, {
+    opacity: 1,
+    y: 0,
+    duration: 0.6,
+    delay: i * 0.1,
+    ease: 'power3.out',
+    scrollTrigger: { trigger: card, start: 'top 85%' }
+  });
+});
+
+// Steps
+gsap.utils.toArray('.step-item').forEach((step, i) => {
+  gsap.to(step, {
+    opacity: 1,
+    y: 0,
+    duration: 0.6,
+    delay: i * 0.1,
+    ease: 'power3.out',
+    scrollTrigger: { trigger: step, start: 'top 85%' }
+  });
+});
+
+// Sequence rows
+gsap.utils.toArray('.sequence-row:not(.header)').forEach((row, i) => {
+  gsap.to(row, {
+    opacity: 1,
+    y: 0,
+    duration: 0.5,
+    delay: i * 0.08,
+    ease: 'power3.out',
+    scrollTrigger: { trigger: row, start: 'top 90%' }
+  });
+});
+
+// Deep dive sections - fade in content
+gsap.utils.toArray('.hat-deep').forEach(section => {
+  const grid = section.querySelector('.hat-deep-grid');
+  gsap.from(grid.children, {
+    opacity: 0,
+    y: 30,
+    duration: 0.7,
+    stagger: 0.2,
+    ease: 'power3.out',
+    scrollTrigger: { trigger: section, start: 'top 70%' }
+  });
+});
+</script>
+
+</body>
+</html>
