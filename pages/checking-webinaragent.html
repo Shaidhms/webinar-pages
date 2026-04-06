@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Six Thinking Hats - Strategic Thinking Workshop</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #0f172a;
+            color: #e2e8f0;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .hero {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%);
+        }
+
+        .badge {
+            background: linear-gradient(90deg, #f59e0b, #f97316);
+            color: #0f172a;
+            padding: 8px 20px;
+            border-radius: 25px;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 2rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .hero-title {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(3rem, 8vw, 6rem);
+            font-weight: 700;
+            text-align: center;
+            background: linear-gradient(135deg, #f59e0b, #f97316, #8b5cf6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1rem;
+            line-height: 1.1;
+        }
+
+        .hero-subtitle {
+            font-size: 1.5rem;
+            color: #94a3b8;
+            text-align: center;
+            margin-bottom: 3rem;
+            max-width: 600px;
+        }
+
+        .scroll-indicator {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            animation: bounce 2s infinite;
+        }
+
+        .scroll-indicator::after {
+            content: '↓';
+            font-size: 2rem;
+            color: #f59e0b;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateX(-50%) translateY(0); }
+            40% { transform: translateX(-50%) translateY(-10px); }
+            60% { transform: translateX(-50%) translateY(-5px); }
+        }
+
+        .nav-dots {
+            position: fixed;
+            right: 30px;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 1000;
+        }
+
+        .nav-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: rgba(148, 163, 184, 0.3);
+            margin: 10px 0;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .nav-dot.active {
+            background: #f59e0b;
+            transform: scale(1.2);
+        }
+
+        .section {
+            padding: 100px 0;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding-left: 2rem;
+            padding-right: 2rem;
+        }
+
+        .section-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 3rem;
+            color: #f59e0b;
+            margin-bottom: 3rem;
+            text-align: center;
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 3px;
+            background: linear-gradient(90deg, #f59e0b, #f97316);
+            border-radius: 2px;
+        }
+
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+
+        .card {
+            background: #1e293b;
+            border: 1px solid #334155;
+            border-radius: 15px;
+            padding: 2rem;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #f59e0b, #f97316);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            border-color: #f59e0b;
+            box-shadow: 0 20px 40px rgba(245, 158, 11, 0.1);
+        }
+
+        .card:hover::before {
+            opacity: 1;
+        }
+
+        .card-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        .card-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #f1f5f9;
+            margin-bottom: 1rem;
+        }
+
+        .hat-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+
+        .hat-card {
+            background: #1e293b;
+            border: 1px solid #334155;
+            border-radius: 20px;
+            padding: 2.5rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hat-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(245, 158, 11, 0.1) 0%, transparent 70%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .hat-card:hover::before {
+            opacity: 1;
+        }
+
+        .hat-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            border-color: #f59e0b;
+        }
+
+        .hat-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        .hat-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            font-family: 'Playfair Display', serif;
+        }
+
+        .white-hat { border-left: 5px solid #ffffff; }
+        .red-hat { border-left: 5px solid #ef4444; }
+        .black-hat { border-left: 5px solid #374151; }
+        .yellow-hat { border-left: 5px solid #eab308; }
+        .green-hat { border-left: 5px solid #22c55e; }
+        .blue-hat { border-left: 5px solid #3b82f6; }
+
+        .quote-block {
+            background: linear-gradient(135deg, #1e293b, #334155);
+            border-left: 5px solid #f59e0b;
+            border-radius: 10px;
+            padding: 2rem;
+            margin: 3rem 0;
+            font-style: italic;
+            font-size: 1.2rem;
+            position: relative;
+        }
+
+        .quote-block::before {
+            content: '"';
+            font-size: 4rem;
+            color: #f59e0b;
+            position: absolute;
+            top: -10px;
+            left: 20px;
+            font-family: serif;
+        }
+
+        .benefits-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin: 3rem 0;
+        }
+
+        .benefit-item {
+            background: #1e293b;
+            border: 1px solid #334155;
+            border-radius: 12px;
+            padding: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .benefit-item:hover {
+            background: #334155;
+            transform: translateX(5px);
+        }
+
+        .benefit-icon {
+            font-size: 1.5rem;
+            color: #f59e0b;
+        }
+
+        .process-timeline {
+            position: relative;
+            margin: 3rem 0;
+        }
+
+        .process-timeline::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 3px;
+            height: 100%;
+            background: linear-gradient(to bottom, #f59e0b, #f97316);
+            border-radius: 2px;
+        }
+
+        .timeline-item {
+            display: flex;
+            align-items: center;
+            margin: 3rem 0;
+            position: relative;
+        }
+
+        .timeline-item:nth-child(even) {
+            flex-direction: row-reverse;
+        }
+
+        .timeline-content {
+            background: #1e293b;
+            border: 1px solid #334155;
+            border-radius: 15px;
+            padding: 2rem;
+            width: 45%;
+            position: relative;
+        }
+
+        .timeline-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #f59e0b, #f97316);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: #0f172a;
+            font-weight: bold;
+            margin: 0 2rem;
+            z-index: 2;
+            position: relative;
+        }
+
+        .footer {
+            background: #1e293b;
+            border-top: 1px solid #334155;
+            padding: 3rem 0;
+            text-align: center;
+            margin-top: 5rem;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        @media (max-width: 768px) {
+            .nav-dots {
+                display: none;
+            }
+            
+            .hero-title {
+                font-size: 2.5rem;
+            }
+            
+            .section-title {
+                font-size: 2rem;
+            }
+            
+            .timeline-item {
+                flex-direction: column !important;
+                text-align: center;
+            }
+            
+            .timeline-content {
+                width: 100%;
+                margin: 1rem 0;
+            }
+            
+            .process-timeline::before {
+                left: 30px;
+            }
+            
+            .timeline-icon {
+                margin: 1rem 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="nav-dots">
+        <div class="nav-dot active" data-section="hero"></div>
+        <div class="nav-dot" data-section="overview"></div>
+        <div class="nav-dot" data-section="hats"></div>
+        <div class="nav-dot" data-section="benefits"></div>
+        <div class="nav-dot" data-section="process"></div>
+    </nav>
+
+    <section class="hero" id="hero">
+        <div class="badge">🎯 Strategic Thinking Workshop</div>
+        <h1 class="hero-title">Six Thinking Hats</h1>
+        <p class="hero-subtitle">Transform Your Decision-Making Process with Parallel Thinking</p>
+        <div class="scroll-indicator"></div>
+    </section>
+
+    <section class="section" id="overview">
+        <h2 class="section-title">🧠 Key Insights</h2>
+        
+        <div class="quote-block">
+            It is not about the person, it is about your thinking. It is not about the thinker, it is about the thinking.
+        </div>
+
+        <div class="cards-grid">
+            <div class="card">
+                <div class="card-icon">⏰</div>
+                <h3 class="card-title">75% Time Savings</h3>
+                <p>Organizations using Six Thinking Hats report saving up to 75% of meeting time by focusing discussions and eliminating ego-driven debates.</p>
+            </div>
+            
+            <div class="card">
+                <div class="card-icon">🎯</div>
+                <h3 class="card-title">Parallel Thinking</h3>
+                <p>Instead of arguing different viewpoints simultaneously, everyone focuses on the same perspective at the same time, leading to more productive discussions.</p>
+            </div>
+            
+            <div class="card">
+                <div class="card-icon">🚫</div>
+                <h3 class="card-title">No More Ego Fights</h3>
+                <p>By separating the thinker from the thinking, personal conflicts are minimized and focus shifts to exploring ideas objectively.</p>
+            </div>
+            
+            <div class="card">
+                <div class="card-icon">👥</div>
+                <h3 class="card-title">Universal Application</h3>
+                <p>Useful for entrepreneurs, managers, employees, and anyone involved in decision-making processes.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="section" id="hats">
+        <h2 class="section-title">🎩 The Six Thinking Hats</h2>
+        
+        <div class="hat-cards">
+            <div class="hat-card white-hat">
+                <div class="hat-icon">⚪</div>
+                <h3 class="hat-title">White Hat</h3>
+                <p><strong>Facts & Data</strong></p>
+                <p>Focus on verified facts and information. What do we know for certain? What data do we need? Where are the gaps in our knowledge?</p>
+            </div>
+            
+            <div class="hat-card red-hat">
+                <div class="hat-icon">🔴</div>
+                <h3 class="hat-title">Red Hat</h3>
+                <p><strong>Emotions & Intuition</strong></p>
+                <p>Express feelings, hunches, and gut reactions. What is your emotional response? What does your intuition tell you?</p>
+            </div>
+            
+            <div class="hat-card black-hat">
+                <div class="hat-icon">⚫</div>
+                <h3 class="hat-title">Black Hat</h3>
+                <p><strong>Critical Thinking</strong></p>
+                <p>Identify risks, problems, and potential downsides. What could go wrong? What are the challenges and obstacles?</p>
+            </div>
+            
+            <div class="hat-card yellow-hat">
+                <div class="hat-icon">🟡</div>
+                <h3 class="hat-title">Yellow Hat</h3>
+                <p><strong>Optimism & Benefits</strong></p>
+                <p>Focus on positive aspects, benefits, and opportunities. What are the advantages? Why might this work?</p>
+            </div>
+            
+            <div class="hat-card green-hat">
+                <div class="hat-icon">🟢</div>
+                <h3 class="hat-title">Green Hat</h3>
+                <p><strong>Creativity & Ideas</strong></p>
+                <p>Generate new ideas, alternatives, and creative solutions. Think outside the box and explore possibilities.</p>
+            </div>
+            
+            <div class="hat-card blue-hat">
+                <div class="hat-icon">🔵</div>
+                <h3 class="hat-title">Blue Hat</h3>
+                <p><strong>Process Control</strong></p>
+                <p>Manage the thinking process. Set objectives, control the discussion flow, and ensure proper hat sequencing.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="section" id="benefits">
+        <h2 class="section-title">✨ Key Benefits</h2>
+        
+        <div class="benefits-grid">
+            <div class="benefit-item">
+                <div class="benefit-icon">🎯</div>
+                <div>
+                    <h4>Focused Discussions</h4>
+                    <p>Everyone thinks in the same direction at the same time</p>
+                </div>
+            </div>
+            
+            <div class="benefit-item">
+                <div class="benefit-icon">⏱️</div>
+                <div>
+                    <h4>Time Efficient</h4>
+                    <p>Save up to 75% of meeting time</p>
+                </div>
+            </div>
+            
+            <div class="benefit-item">
+                <div class="benefit-icon">🤝</div>
+                <div>
+                    <h4>Reduced Conflicts</h4>
+                    <p>Eliminate ego-based arguments</p>
+                </div>
+            </div>
+            
+            <div class="benefit-item">
+                <div class="benefit-icon">💡</div>
+                <div>
+                    <h4>Better Ideas</h4>
+                    <p>Systematic exploration of all perspectives</p>
+                </div>
+            </div>
+            
+            <div class="benefit-item">
+                <div class="benefit-icon">📊</div>
+                <div>
+                    <h4>Structured Thinking</h4>
+                    <p>Organized approach to problem-solving</p>
+                </div>
+            </div>
+            
+            <div class="benefit-item">
+                <div class="benefit-icon">🎪</div>
+                <div>
+                    <h4>Easy Implementation</h4>
+                    <p>Simple framework anyone can use</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section" id="process">
+        <h2 class="section-title">🔄 Implementation Process</h2>
+        
+        <div class="process-timeline">
+            <div class="timeline-item">
+                <div class="timeline-content">
+                    <h4>1. Set the Objective (Blue Hat)</h4>
+                    <p>Define what you want to achieve. Are you making a decision, solving a problem, or generating ideas?</p>
+                </div>
+                <div class="timeline-icon">🎯</div>
+                <div style="width: 45%;"></div>
+            </div>
+            
+            <div class="timeline-item">
+                <div style="width: 45%;"></div>
+                <div class="timeline-icon">📊</div>
+                <div class="timeline-content">
+                    <h4>2. Gather Facts (White Hat)</h4>
+                    <p>Collect and share all relevant data and information. Identify what you know and what's missing.</p>
+                </div>
+            </div>
+            
+            <div class="timeline-item">
+                <div class="timeline-content">
+                    <h4>3. Express Feelings (Red Hat)</h4>
+                    <p>Allow everyone to share their gut reactions and emotional responses without justification.</p>
+                </div>
+                <div class="timeline-icon">❤️</div>
+                <div style="width: 45%;"></div>
+            </div>
+            
+            <div class="timeline-item">
+                <div style="width: 45%;"></div>
+                <div class="timeline-icon">💡</div>
+                <div class="timeline-content">
+                    <h4>4. Generate Ideas (Green Hat)</h4>
+                    <p>Brainstorm creative solutions and alternatives without immediate judgment.</p>
+                </div>
+            </div>
+            
+            <div class="timeline-item">
+                <div class="timeline-content">
+                    <h4>5. Explore Benefits (Yellow Hat)</h4>
+                    <p>Focus on the positive aspects and potential benefits of each option.</p>
+                </div>
+                <div class="timeline-icon">☀️</div>
+                <div style="width: 45%;"></div>
+            </div>
+            
+            <div class="timeline-item">
+                <div style="width: 45%;"></div>
+                <div class="timeline-icon">⚠️</div>
+                <div class="timeline-content">
+                    <h4>6. Identify Risks (Black Hat)</h4>
+                    <p>Examine potential problems, challenges, and risks associated with each option.</p>
+                </div>
+            </div>
+            
+            <div class="timeline-item">
+                <div class="timeline-content">
+                    <h4>7. Conclude (Blue Hat)</h4>
+                    <p>Summarize insights, make decisions, and plan next steps based on the structured thinking process.</p>
+                </div>
+                <div class="timeline-icon">🏁</div>
+                <div style="width: 45%;"></div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <p>Six Thinking Hats methodology by Edward de Bono</p>
+            <p style="margin-top: 1rem; color: #64748b;">Strategic Thinking Workshop - Transforming Decision Making</p>
+        </div>
+    </footer>
+
+    <script>
+        // Navigation dots functionality
+        const sections = document.querySelectorAll('section[id]');
+        const navDots = document.querySelectorAll('.nav-dot');
+        
+        function updateActiveNav() {
+            const scrollPos = window.scrollY + 100;
+            
+            sections.forEach((section, index) => {
+                const sectionTop = section.offsetTop;
+                const sectionBottom = sectionTop + section.offsetHeight;
+                
+                if (scrollPos >= sectionTop && scrollPos < sectionBottom) {
+                    navDots.forEach(dot => dot.classList.remove('active'));
+                    navDots[index].classList.add('active');
+                }
+            });
+        }
+        
+        navDots.forEach(dot => {
+            dot.addEventListener('click', () => {
+                const section = document.getElementById(dot.dataset.section);
+                section.scrollIntoView({ behavior: 'smooth' });
+            });
+        });
+        
+        window.addEventListener('scroll', updateActiveNav);
+        
+        // Smooth reveal animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+        
+        document.querySelectorAll('.card, .hat-card, .timeline-item').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(30px)';
+            el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            observer.observe(el);
+        });
+    </script>
+</body>
+</html>
